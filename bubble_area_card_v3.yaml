@@ -1,0 +1,3412 @@
+ramss3s_area_v3:
+  name: "Bubble Area Card v3 (Ramss3s)"
+  version: "v3.0.0"
+  creator: "Ramss3s"
+  link: "https://github.com/Clooos/Bubble-Card"
+  supported:
+    - button
+  suggestions:
+    - label: "Area Card v3"
+      domains: [light, sensor, switch, binary_sensor, input_boolean]
+      config:
+        card_type: button
+        button_type: state
+        entity: ${entity}
+        modules:
+          - ramss3s_area_v3
+        ramss3s_area_v3:
+          enable_light_glow: true
+          show_temperature: true
+          show_humidity: true
+          show_alerts: true
+
+  description: |
+    Transform any Bubble Card button into a smart, modern <b>Area Card v3</b> with dynamic alert icon replacement (central icon swaps to active alert), automatic sensor discovery, dynamic room light controls, customizable ambient light glow effects, and advanced background styling.
+
+  editor:
+    - name: area
+      label: "Area / Room"
+      description: "Select room from Home Assistant (e.g. Office, Living Room, Bedroom)"
+      selector:
+        area: {}
+
+    - name: card_layout
+      label: "Card Layout"
+      description: "Visual structure of the card (adapts automatically to grid rows)"
+      selector:
+        select:
+          options:
+            - label: "Compact Vertical (Default - HA native style)"
+              value: vertical
+            - label: "Square (1:1 Aspect Ratio)"
+              value: square
+            - label: "Horizontal (Bubble Button style)"
+              value: horizontal
+            - label: "Minimalist (Icon and name only)"
+              value: minimal
+
+    - type: expandable
+      title: "Lighting & Ambience"
+      icon: "mdi:lightbulb-group"
+      expanded: false
+      schema:
+        - name: glow_style
+          label: "Ambient Light Glow"
+          description: "Ambient lighting style when room lights are on"
+          selector:
+            select:
+              options:
+                - label: "Warm Center Aura (Warm aura behind icon - Recommended)"
+                  value: center_aura
+                - label: "Icon Glow Only (Only icon glows, clean background)"
+                  value: icon_glow
+                - label: "Soft Ambient Wash (Soft diffused wash)"
+                  value: warm_ambient
+                - label: "Accent Border (Golden/accent border on card edge)"
+                  value: accent_border
+                - label: "Disabled (No ambient glow)"
+                  value: none
+        - name: light_indicator_style
+          label: "Light Count Indicator"
+          description: "Show count of active lights"
+          selector:
+            select:
+              options:
+                - label: "Card Top-Right Capsule (Recommended - light dots)"
+                  value: card_corner
+                - label: "Subtitle beside sensors (e.g. 21 deg C - 2 lights)"
+                  value: subtitle
+                - label: "Above Icon (Above central icon)"
+                  value: above_icon
+                - label: "None (Hidden)"
+                  value: none
+        - name: sync_light_color
+          label: "Dynamic Auto-Color from Room Lights"
+          description: "Synchronize aura and bar color with RGB room lights"
+          selector:
+            boolean: {}
+
+    - type: expandable
+      title: "Sensors & Climate"
+      icon: "mdi:thermometer-water"
+      expanded: false
+      schema:
+        - name: show_temperature
+          label: "Show Temperature"
+          selector:
+            boolean: {}
+        - name: show_humidity
+          label: "Show Humidity"
+          selector:
+            boolean: {}
+        - name: show_climate_badge
+          label: "Thermostat Status Capsule (Top Left)"
+          description: "Show heating/cooling icon and target temperature in top-left capsule"
+          selector:
+            boolean: {}
+        - name: auto_scroll_subtitle
+          label: "Auto-scroll Subtitle on Overflow"
+          description: "Smooth Apple-style ping-pong scroll when subtitle text is too long for the card"
+          selector:
+            boolean: {}
+        - name: exclude_entities
+          label: "Exclude Sensors & Entities"
+          description: "Exclude specific sensors, lights, or entities from this room"
+          selector:
+            entity:
+              multiple: true
+
+    - type: expandable
+      title: "Alerts & Security"
+      icon: "mdi:shield-alert"
+      expanded: false
+      schema:
+        - name: show_alerts
+          label: "Show Active Alerts"
+          description: "Display alert indicators on the card when abnormal states are detected"
+          selector:
+            boolean: {}
+        - name: alert_style
+          label: "Alert Style & Placement"
+          selector:
+            select:
+              options:
+                - label: "Dynamic Main Icon (Central icon swaps on alert - Recommended)"
+                  value: dynamic_icon
+                - label: "Text pill in subtitle (Under room title)"
+                  value: subtitle_badge
+                - label: "Both (Dynamic Icon + Subtitle pill)"
+                  value: both
+        - name: alert_motion
+          label: "Motion / Occupancy Alerts"
+          selector:
+            boolean: {}
+        - name: alert_moisture
+          label: "Water Leak / Moisture Alerts"
+          selector:
+            boolean: {}
+        - name: alert_smoke_gas
+          label: "Smoke / Gas / CO Alerts"
+          selector:
+            boolean: {}
+        - name: alert_door_window
+          label: "Open Doors / Windows Alerts"
+          selector:
+            boolean: {}
+        - name: alert_air_quality
+          label: "Air Quality / CO2 Alerts"
+          description: "Display alert when CO2 exceeds 1000 ppm or air quality is poor"
+          selector:
+            boolean: {}
+        - name: alert_battery
+          label: "Low Battery Alerts"
+          description: "Display warning when device or sensor battery in this room drops below threshold"
+          selector:
+            boolean: {}
+        - name: battery_alert_threshold
+          label: "Battery Alert Threshold (%)"
+          description: "Alert when battery is at or below this percentage (Default: 15%)"
+          selector:
+            number:
+              min: 5
+              max: 50
+              step: 5
+              unit_of_measurement: "%"
+              mode: slider
+        - name: enable_presence_pulse
+          label: "Presence Radar Pulse"
+          description: "Animated radar wave around icon when motion is detected"
+          selector:
+            boolean: {}
+
+    - type: expandable
+      title: "Media Player & Sound Waves"
+      icon: "mdi:speaker"
+      expanded: false
+      schema:
+        - name: show_media_waves
+          label: "Four-Corner Sound Waves when Playing"
+          description: "Displays subtle animated sound waves in all 4 corners when media is playing"
+          selector:
+            boolean: {}
+        - name: media_waves_type
+          label: "Waves Render Style"
+          description: "Full layered color discs or thin line outlines"
+          selector:
+            select:
+              options:
+                - label: "Filled Layered Discs (Recommended - Soft acoustic waves)"
+                  value: filled
+                - label: "Thin Line Outlines (Discreet subtle rings)"
+                  value: outline
+        - name: media_waves_style
+          label: "Sound Waves Color Tone"
+          description: "Visual appearance and color palette of the acoustic waves"
+          selector:
+            select:
+              options:
+                - label: "Soft Cyan (Gentle Aqua - Recommended)"
+                  value: soft_cyan
+                - label: "Muted Slate (Elegant, zero glare)"
+                  value: subtle_slate
+                - label: "Warm Amber (Cozy - Harmonizes with warm lights)"
+                  value: warm_amber
+                - label: "Synth Violet (Modern acoustic vibe)"
+                  value: synth_violet
+                - label: "Minimalist Soft White (Discreet monochrome)"
+                  value: soft_white
+        - name: media_waves_speed
+          label: "Animation Speed"
+          selector:
+            select:
+              options:
+                - label: "Relaxed & Calm (Recommended - 3.9s)"
+                  value: relaxed
+                - label: "Gentle & Very Slow (5.4s)"
+                  value: gentle
+                - label: "Moderate (3.0s)"
+                  value: moderate
+        - name: media_waves_opacity
+          label: "Waves Opacity (%)"
+          description: "Adjust overall opacity / intensity of the waves (10% to 100%)"
+          selector:
+            number:
+              min: 10
+              max: 100
+              step: 5
+              unit_of_measurement: "%"
+              mode: slider
+
+    - type: expandable
+      title: "Edge Progress Bar (Brightness / Volume)"
+      icon: "mdi:ruler"
+      expanded: false
+      schema:
+        - name: show_edge_bar
+          label: "Show Edge Progress Bar"
+          description: "Subtle micro progress bar at card edge showing light brightness or media volume"
+          selector:
+            boolean: {}
+        - name: edge_bar_mode
+          label: "Progress Bar Mode"
+          selector:
+            select:
+              options:
+                - label: "Smart Auto (Volume when playing, Brightness when lights on)"
+                  value: auto
+                - label: "Lights Brightness Only"
+                  value: lights
+                - label: "Media Volume Only"
+                  value: media
+        - name: edge_bar_thickness
+          label: "Bar Thickness"
+          selector:
+            select:
+              options:
+                - label: "Subtle Micro (2.5px - Recommended)"
+                  value: subtle
+                - label: "Ultra Thin (1.5px - Minimalist)"
+                  value: ultra_thin
+                - label: "Medium (4px - Clear and crisp)"
+                  value: medium
+
+    - type: expandable
+      title: "Design & Appearance"
+      icon: "mdi:palette"
+      expanded: false
+      schema:
+        - name: custom_name
+          label: "Custom Room Name (Optional)"
+          selector:
+            text: {}
+        - name: custom_icon
+          label: "Custom Icon (Overrides room icon)"
+          selector:
+            icon: {}
+        - name: show_icon_circle
+          label: "Translucent Circle around Icon"
+          description: "Enable frosted background circle around room icon"
+          selector:
+            boolean: {}
+        - name: enable_circle_depth
+          label: "Circle Delimiter Ring & Depth Shadow (Active Only)"
+          description: "Add depth shadow and delimiter outline to icon circle when active"
+          selector:
+            boolean: {}
+        - name: card_border_radius
+          label: "Card Border Radius (px)"
+          description: "Default: 28px. Choose from 0px to 40px."
+          selector:
+            number:
+              min: 0
+              max: 40
+              step: 1
+              unit_of_measurement: "px"
+              mode: slider
+        - name: card_border_style
+          label: "Card Border Style"
+          selector:
+            select:
+              options:
+                - label: "Subtle Translucent Border (Recommended)"
+                  value: subtle
+                - label: "Glow Accent Border (Matches active room color)"
+                  value: accent
+                - label: "None / Borderless"
+                  value: none
+        - name: card_shadow_style
+          label: "Card Shadow Style"
+          description: "Select shadow style to avoid dark artifacts on dark themes"
+          selector:
+            select:
+              options:
+                - label: "None / Flat (Clean, zero shadows)"
+                  value: none
+                - label: "Subtle (Soft fine shadow)"
+                  value: subtle
+                - label: "Elevated (Classic elevated shadow)"
+                  value: elevated
+        - name: custom_bg_color
+          label: "Custom Background Color"
+          description: "Optional custom background (Hex, RGB or CSS Gradient). Leave empty for native theme."
+          selector:
+            text: {}
+        - name: show_background_image
+          label: "Show Room Picture as Background"
+          selector:
+            boolean: {}
+        - name: adaptive_bg_brightness
+          label: "Adaptive Background Brightness"
+          description: "Brighten picture when lights turn on, dim when lights turn off"
+          selector:
+            boolean: {}
+
+    - type: expandable
+      title: "Test Gallery & State Preview"
+      icon: "mdi:flask"
+      expanded: false
+      schema:
+        - name: test_alert
+          label: "Test State Preview"
+          description: "Preview any signature room state or alert scenario"
+          selector:
+            select:
+              options:
+                - label: "No Test (Live Sensors & HA State)"
+                  value: none
+                - label: "1. Idle / Night State (All Lights Off)"
+                  value: idle
+                - label: "2. Warm Lights On (Active Glow & Bar)"
+                  value: lights
+                - label: "3. Media Playing (Sound Waves & Volume Bar)"
+                  value: media
+                - label: "4. Dual Sliders (Lights & Volume)"
+                  value: dual_sliders
+                - label: "5. Motion Detection (Motion Icon + Radar Pulse)"
+                  value: motion
+                - label: "6. Water Leak Alert (Water Icon + Cyan Pulse)"
+                  value: moisture
+                - label: "7. Critical Smoke Alert (Fire Icon + Red Alarm Pulse)"
+                  value: smoke
+                - label: "8. Open Door Alert (Door Open Icon)"
+                  value: door
+                - label: "9. Open Window Alert (Window Open Icon)"
+                  value: window
+                - label: "10. Air Quality Alert (CO2 Filter Icon)"
+                  value: air_quality
+                - label: "11. Thermostat Heating (Flame 22°)"
+                  value: climate_heating
+                - label: "12. Thermostat Cooling (Snowflake 21°)"
+                  value: climate_cooling
+                - label: "13. Low Battery Warning (Battery Alert Icon)"
+                  value: battery
+                - label: "Priority Test: 1 Alert (Water Leak Icon)"
+                  value: multi_one
+                - label: "Priority Test: 2 Alerts (Leak overrides Motion)"
+                  value: multi_two
+                - label: "Priority Test: 3 Alerts (Smoke overrides Leak & Motion)"
+                  value: multi_three
+                - label: "Priority Test: 4 Alerts (Smoke highest priority)"
+                  value: multi_four
+
+  code: |
+    ${(() => {
+      try {
+        const ctx = typeof this !== 'undefined' ? this : {};
+        const cardObj = (typeof card !== 'undefined' && card) ? card : (ctx.card || null);
+        const cardConfig = (ctx && ctx.config)
+          || (typeof config !== 'undefined' && config) 
+          || (cardObj && (cardObj.config || cardObj._config)) 
+          || {};
+
+        // 1. Dynamic module configuration discovery
+        let modCfg = null;
+        if (Array.isArray(cardConfig.modules)) {
+          for (const m of cardConfig.modules) {
+            if (typeof m === 'string') {
+              if (cardConfig[m] && typeof cardConfig[m] === 'object') {
+                const cand = cardConfig[m];
+                if (cand.area !== undefined || cand.card_layout !== undefined || cand.enable_light_glow !== undefined || cand.show_temperature !== undefined) {
+                  modCfg = cand;
+                  break;
+                }
+              }
+            } else if (m && typeof m === 'object') {
+              for (const k of Object.keys(m)) {
+                if (m[k] && typeof m[k] === 'object' && (m[k].area !== undefined || m[k].card_layout !== undefined || m[k].enable_light_glow !== undefined)) {
+                  modCfg = m[k];
+                  break;
+                }
+              }
+              if (!modCfg && (m.area !== undefined || m.card_layout !== undefined)) {
+                modCfg = m;
+                break;
+              }
+            }
+          }
+        }
+
+        if (!modCfg) {
+          const knownKeys = ['ramss3s_area_v3', 'Bubble Area Card v3 (Ramss3s)', 'ramss3s_area_v2', 'ramss3s_area', 'Bubble Area Card v2 (Ramss3s)', 'Bubble Area Card (Ramss3s)', 'bubble_area_v2', 'bubble_area', 'bubble_area_card', 'area_card'];
+          for (const k of knownKeys) {
+            if (cardConfig[k] && typeof cardConfig[k] === 'object') {
+              modCfg = cardConfig[k];
+              break;
+            }
+          }
+        }
+
+        if (!modCfg) {
+          for (const [k, val] of Object.entries(cardConfig)) {
+            if (val && typeof val === 'object' && !Array.isArray(val)) {
+              if (val.area !== undefined || val.card_layout !== undefined || val.enable_light_glow !== undefined || val.show_alerts !== undefined) {
+                modCfg = val;
+                break;
+              }
+            }
+          }
+        }
+
+        if (!modCfg) {
+          const candidates = [ctx.moduleConfig, ctx._moduleConfig, ctx.module_config, cardObj?.moduleConfig, cardObj?._moduleConfig];
+          for (const cand of candidates) {
+            if (cand && typeof cand === 'object' && (cand.area !== undefined || cand.card_layout !== undefined)) {
+              modCfg = cand;
+              break;
+            }
+          }
+        }
+
+        modCfg = Object.assign({}, modCfg || {});
+
+        // Direct cardConfig overrides
+        if (cardConfig.area !== undefined) modCfg.area = cardConfig.area;
+        if (cardConfig.card_layout !== undefined) modCfg.card_layout = cardConfig.card_layout;
+        if (cardConfig.enable_light_glow !== undefined) modCfg.enable_light_glow = cardConfig.enable_light_glow;
+        if (cardConfig.glow_style !== undefined) modCfg.glow_style = cardConfig.glow_style;
+        if (cardConfig.alert_style !== undefined) modCfg.alert_style = cardConfig.alert_style;
+        if (cardConfig.subtitle_mode !== undefined) modCfg.subtitle_mode = cardConfig.subtitle_mode;
+        if (cardConfig.tap_action !== undefined) modCfg.tap_action = cardConfig.tap_action;
+        if (cardConfig.navigation_path !== undefined) modCfg.navigation_path = cardConfig.navigation_path;
+        if (cardConfig.show_temperature !== undefined) modCfg.show_temperature = cardConfig.show_temperature;
+        if (cardConfig.show_humidity !== undefined) modCfg.show_humidity = cardConfig.show_humidity;
+        if (cardConfig.show_alerts !== undefined) modCfg.show_alerts = cardConfig.show_alerts;
+        if (cardConfig.show_climate_badge !== undefined) modCfg.show_climate_badge = cardConfig.show_climate_badge;
+        if (cardConfig.auto_scroll_subtitle !== undefined) modCfg.auto_scroll_subtitle = cardConfig.auto_scroll_subtitle;
+        if (cardConfig.show_door_window_badge !== undefined) modCfg.show_door_window_badge = cardConfig.show_door_window_badge;
+        if (cardConfig.show_light_badge !== undefined) modCfg.show_light_badge = cardConfig.show_light_badge;
+        if (cardConfig.show_icon_circle !== undefined) modCfg.show_icon_circle = cardConfig.show_icon_circle;
+        if (cardConfig.enable_circle_depth !== undefined) modCfg.enable_circle_depth = cardConfig.enable_circle_depth;
+        if (cardConfig.card_border_radius !== undefined) modCfg.card_border_radius = cardConfig.card_border_radius;
+        if (cardConfig.border_radius !== undefined) modCfg.border_radius = cardConfig.border_radius;
+        if (cardConfig.custom_name !== undefined) modCfg.custom_name = cardConfig.custom_name;
+        if (cardConfig.name !== undefined && !modCfg.custom_name) modCfg.custom_name = cardConfig.name;
+        if (cardConfig.custom_icon !== undefined) modCfg.custom_icon = cardConfig.custom_icon;
+        if (cardConfig.icon !== undefined && !modCfg.custom_icon) modCfg.custom_icon = cardConfig.icon;
+        if (cardConfig.icon_size !== undefined) modCfg.icon_size = cardConfig.icon_size;
+        if (cardConfig.card_language !== undefined) modCfg.card_language = cardConfig.card_language;
+        if (cardConfig.show_background_image !== undefined) modCfg.show_background_image = cardConfig.show_background_image;
+        if (cardConfig.adaptive_bg_brightness !== undefined) modCfg.adaptive_bg_brightness = cardConfig.adaptive_bg_brightness;
+        if (cardConfig.enable_presence_pulse !== undefined) modCfg.enable_presence_pulse = cardConfig.enable_presence_pulse;
+        if (cardConfig.show_media_waves !== undefined) modCfg.show_media_waves = cardConfig.show_media_waves;
+        if (cardConfig.media_waves_type !== undefined) modCfg.media_waves_type = cardConfig.media_waves_type;
+        if (cardConfig.media_waves_style !== undefined) modCfg.media_waves_style = cardConfig.media_waves_style;
+        if (cardConfig.media_waves_speed !== undefined) modCfg.media_waves_speed = cardConfig.media_waves_speed;
+        if (cardConfig.media_waves_opacity !== undefined) modCfg.media_waves_opacity = cardConfig.media_waves_opacity;
+        if (cardConfig.test_media_waves !== undefined) modCfg.test_media_waves = cardConfig.test_media_waves;
+        if (cardConfig.show_edge_bar !== undefined) modCfg.show_edge_bar = cardConfig.show_edge_bar;
+        if (cardConfig.edge_bar_mode !== undefined) modCfg.edge_bar_mode = cardConfig.edge_bar_mode;
+        if (cardConfig.edge_bar_thickness !== undefined) modCfg.edge_bar_thickness = cardConfig.edge_bar_thickness;
+        if (cardConfig.custom_bg_color !== undefined) modCfg.custom_bg_color = cardConfig.custom_bg_color;
+        if (cardConfig.sync_light_color !== undefined) modCfg.sync_light_color = cardConfig.sync_light_color;
+        if (cardConfig.enable_mesh_glow !== undefined) modCfg.enable_mesh_glow = cardConfig.enable_mesh_glow;
+        if (cardConfig.card_border_style !== undefined) modCfg.card_border_style = cardConfig.card_border_style;
+        if (cardConfig.show_concentric_rings !== undefined) modCfg.show_concentric_rings = cardConfig.show_concentric_rings;
+        if (cardConfig.card_shadow_style !== undefined) modCfg.card_shadow_style = cardConfig.card_shadow_style;
+        if (cardConfig.test_alert !== undefined) modCfg.test_alert = cardConfig.test_alert;
+        if (cardConfig.exclude_entities !== undefined) modCfg.exclude_entities = cardConfig.exclude_entities;
+        if (cardConfig.excluded_entities !== undefined) modCfg.exclude_entities = cardConfig.excluded_entities;
+        if (cardConfig.exclude_sensors !== undefined) modCfg.exclude_sensors = cardConfig.exclude_sensors;
+
+        // Robust hass resolution
+        const hassObj = (typeof hass !== 'undefined' && hass) 
+          || ctx.hass 
+          || cardObj?.hass 
+          || cardObj?._hass 
+          || (typeof document !== 'undefined' ? document.querySelector('home-assistant')?.hass : null) 
+          || null;
+
+        if (!hassObj || !hassObj.states) return '';
+
+        // Global cache for Area & Device Registries
+        if (!window._bac_cache) {
+          window._bac_cache = {
+            areas: null,
+            devices: null,
+            entities: null,
+            fetching: false,
+            lastFetch: 0
+          };
+        }
+        const bacCache = window._bac_cache;
+
+        // Fetch registries via WebSocket if hassObj lacks .areas or .entities
+        const needFetch = (!hassObj.areas || Object.keys(hassObj.areas).length === 0 || !hassObj.entities || Object.keys(hassObj.entities).length === 0)
+          && (!bacCache.areas || Date.now() - bacCache.lastFetch > 60000);
+
+        if (needFetch && !bacCache.fetching && hassObj.connection && typeof hassObj.connection.sendMessagePromise === 'function') {
+          bacCache.fetching = true;
+          Promise.all([
+            hassObj.connection.sendMessagePromise({ type: 'config/area_registry/list' }).catch(() => []),
+            hassObj.connection.sendMessagePromise({ type: 'config/device_registry/list' }).catch(() => []),
+            hassObj.connection.sendMessagePromise({ type: 'config/entity_registry/list' }).catch(() => [])
+          ]).then(([areasList, devicesList, entitiesList]) => {
+            const aMap = {};
+            if (Array.isArray(areasList)) areasList.forEach(a => { aMap[a.area_id] = a; });
+            const dMap = {};
+            if (Array.isArray(devicesList)) devicesList.forEach(d => { dMap[d.id] = d; });
+            const eMap = {};
+            if (Array.isArray(entitiesList)) entitiesList.forEach(e => { eMap[e.entity_id] = e; });
+
+            bacCache.areas = aMap;
+            bacCache.devices = dMap;
+            bacCache.entities = eMap;
+            bacCache.fetching = false;
+            bacCache.lastFetch = Date.now();
+
+            if (cardObj && typeof cardObj.requestUpdate === 'function') {
+              cardObj.requestUpdate();
+            }
+          }).catch(() => {
+            bacCache.fetching = false;
+          });
+        }
+
+        const areasMap = (hassObj.areas && Object.keys(hassObj.areas).length > 0) ? hassObj.areas : (bacCache.areas || {});
+        const devicesMap = (hassObj.devices && Object.keys(hassObj.devices).length > 0) ? hassObj.devices : (bacCache.devices || {});
+        const entitiesMap = (hassObj.entities && Object.keys(hassObj.entities).length > 0) ? hassObj.entities : (bacCache.entities || {});
+
+        // Resolve Target Area
+        let targetAreaId = modCfg.area || cardConfig.area || '';
+        if (Array.isArray(targetAreaId)) {
+          targetAreaId = targetAreaId[0] || '';
+        }
+        targetAreaId = (typeof targetAreaId === 'string' ? targetAreaId : String(targetAreaId || '')).trim();
+        if (targetAreaId.startsWith('area.')) {
+          targetAreaId = targetAreaId.replace('area.', '');
+        }
+
+        let areaObj = null;
+        if (targetAreaId) {
+          const needle = targetAreaId.toLowerCase().trim();
+          if (areasMap[targetAreaId]) {
+            areaObj = areasMap[targetAreaId];
+          } else {
+            for (const [id, a] of Object.entries(areasMap)) {
+              if (id.toLowerCase() === needle || (a.name && a.name.toLowerCase() === needle)) {
+                areaObj = a;
+                targetAreaId = id;
+                break;
+              }
+            }
+          }
+        }
+
+        // Fallback: If area not explicitly specified, deduce from cardConfig.entity
+        if (!areaObj && cardConfig.entity && entitiesMap[cardConfig.entity]) {
+          const entReg = entitiesMap[cardConfig.entity];
+          let aId = entReg.area_id;
+          if (!aId && entReg.device_id && devicesMap[entReg.device_id]) {
+            aId = devicesMap[entReg.device_id].area_id;
+          }
+          if (aId && areasMap[aId]) {
+            areaObj = areasMap[aId];
+            targetAreaId = aId;
+          }
+        }
+
+        if (!areaObj && targetAreaId) {
+          areaObj = { area_id: targetAreaId, name: targetAreaId.charAt(0).toUpperCase() + targetAreaId.slice(1) };
+        } else if (!areaObj) {
+          const areaKeys = Object.keys(areasMap);
+          if (areaKeys.length > 0) {
+            targetAreaId = areaKeys[0];
+            areaObj = areasMap[targetAreaId];
+          }
+        }
+
+        // Language detection & Internationalization based on Home Assistant user settings or card_language override
+        const cardLang = modCfg.card_language || 'auto';
+        const forcedLang = cardLang !== 'auto' ? cardLang.toLowerCase() : null;
+        const haLang = ((hassObj.locale && hassObj.locale.language) || hassObj.language || hassObj.selectedLanguage || 'en').toLowerCase();
+        const userLang = forcedLang || haLang;
+        const isRo = userLang.startsWith('ro');
+
+        const i18n = {
+          motion: isRo ? 'Miscare' : 'Motion',
+          moisture: isRo ? 'Inundatie detectata' : 'Water leak detected',
+          waterDetected: isRo ? 'Apa detectata' : 'Water detected',
+          smoke: isRo ? 'Fum / Gaz' : 'Smoke / Gas',
+          smokeDetected: isRo ? 'Fum detectat' : 'Smoke detected',
+          airQuality: isRo ? 'Calitate aer scazuta' : 'Poor air quality',
+          co2High: isRo ? 'Nivel CO2 ridicat' : 'High CO2 level',
+          door: isRo ? 'Usa deschisa' : 'Door open',
+          window: isRo ? 'Fereastra deschisa' : 'Window open',
+          open: isRo ? 'Deschis' : 'Open',
+          heating: isRo ? 'Incalzire' : 'Heating',
+          cooling: isRo ? 'Racire' : 'Cooling',
+          lightSingular: isRo ? 'lumina aprinsa' : 'light on',
+          lightPlural: isRo ? 'lumini aprinse' : 'lights on',
+          lightsOnShort: isRo ? 'aprinse' : 'on',
+          allOff: isRo ? 'Toate stinse' : 'All off',
+          lowBattery: isRo ? 'Baterie desc\u0103rcat\u0103' : 'Low battery',
+          battery: isRo ? 'Baterie' : 'Battery',
+          connected: isRo ? 'Conectat' : 'Connected',
+          doorsWindowsOpen: isRo ? 'usi/ferestre deschise' : 'doors/windows open',
+          defaultOffice: isRo ? 'Birou' : 'Office'
+        };
+
+        const rawAreaName = (areaObj ? (areaObj.name || areaObj.area_id) : i18n.defaultOffice);
+        const areaName = modCfg.custom_name || rawAreaName;
+
+        // Smart default icon based on room name
+        const getDefaultIcon = (name) => {
+          const n = name.toLowerCase();
+          if (n.includes('birou') || n.includes('office') || n.includes('desk') || n.includes('pc')) return 'mdi:monitor';
+          if (n.includes('living') || n.includes('salon') || n.includes('sufragerie')) return 'mdi:sofa';
+          if (n.includes('dormitor') || n.includes('bedroom') || n.includes('bed')) return 'mdi:bed';
+          if (n.includes('bucatarie') || n.includes('kitchen')) return 'mdi:silverware-fork-knife';
+          if (n.includes('baie') || n.includes('bath') || n.includes('wc')) return 'mdi:shower';
+          if (n.includes('hol') || n.includes('coridor') || n.includes('hall')) return 'mdi:door';
+          if (n.includes('balcon') || n.includes('terasa')) return 'mdi:balcony';
+          if (n.includes('garaj') || n.includes('garage')) return 'mdi:garage';
+          return 'mdi:home-outline';
+        };
+
+        const areaIcon = modCfg.custom_icon || (areaObj && areaObj.icon ? areaObj.icon : getDefaultIcon(areaName));
+        const areaPicture = areaObj ? areaObj.picture : null;
+
+        const layout = modCfg.card_layout || 'vertical';
+        let cardContainerHeightCss = 'height: calc( var(--row-height, 56px) * var(--row-size, 2) + var(--row-gap, 8px) * (var(--row-size, 2) - 1) ) !important; min-height: calc( var(--row-height, 56px) * var(--row-size, 2) + var(--row-gap, 8px) * (var(--row-size, 2) - 1) ) !important;';
+        if (layout === 'square') {
+          cardContainerHeightCss = 'aspect-ratio: 1 / 1 !important; height: auto !important; min-height: 0 !important; max-width: 100% !important;';
+        } else if (layout === 'horizontal') {
+          cardContainerHeightCss = 'height: 54px !important; min-height: 54px !important;';
+        } else if (layout === 'minimal') {
+          cardContainerHeightCss = 'height: 56px !important; min-height: 56px !important;';
+        }
+        const enableLightGlow = modCfg.enable_light_glow !== undefined ? !!modCfg.enable_light_glow : true;
+        const enableMeshGlow = modCfg.enable_mesh_glow !== undefined ? !!modCfg.enable_mesh_glow : true;
+        const glowStyle = modCfg.glow_style || 'center_aura';
+        const alertStyle = modCfg.alert_style || 'icon_badge';
+        const subtitleMode = modCfg.subtitle_mode || 'sensors';
+        const showTemp = modCfg.show_temperature !== undefined ? !!modCfg.show_temperature : true;
+        const showHum = modCfg.show_humidity !== undefined ? !!modCfg.show_humidity : true;
+        const showAlerts = modCfg.show_alerts !== undefined ? !!modCfg.show_alerts : true;
+        const autoScrollSubtitle = modCfg.auto_scroll_subtitle !== undefined ? !!modCfg.auto_scroll_subtitle : true;
+        const showClimateBadge = !!modCfg.show_climate_badge;
+        const showDoorBadge = !!modCfg.show_door_window_badge;
+        
+        // Light indicator style: card_corner (default), subtitle, above_icon, or none
+        const rawLightStyle = modCfg.light_indicator_style;
+        let lightIndicatorStyle = 'card_corner';
+        if (rawLightStyle !== undefined) {
+          lightIndicatorStyle = rawLightStyle;
+        } else if (modCfg.show_light_badge !== undefined) {
+          lightIndicatorStyle = modCfg.show_light_badge ? 'card_corner' : 'none';
+        }
+
+        const showIconCircle = modCfg.show_icon_circle !== undefined ? !!modCfg.show_icon_circle : true;
+        const enableCircleDepth = !!modCfg.enable_circle_depth;
+        const tempCalcMode = modCfg.temp_calc || 'median';
+        const humCalcMode = modCfg.humidity_calc || 'median';
+        const showBgImg = !!modCfg.show_background_image;
+        const adaptiveBgBrightness = modCfg.adaptive_bg_brightness !== undefined ? !!modCfg.adaptive_bg_brightness : true;
+        const enablePresencePulse = modCfg.enable_presence_pulse !== undefined ? !!modCfg.enable_presence_pulse : true;
+        const showMediaWaves = modCfg.show_media_waves !== undefined ? !!modCfg.show_media_waves : true;
+        const testMediaWaves = !!modCfg.test_media_waves;
+        const mediaWavesType = modCfg.media_waves_type || 'filled';
+        const mediaWavesSpeed = modCfg.media_waves_speed || 'relaxed';
+        const rawWaveOpacity = modCfg.media_waves_opacity !== undefined ? Number(modCfg.media_waves_opacity) : 75;
+        const waveOpacity = Math.min(100, Math.max(10, isNaN(rawWaveOpacity) ? 75 : rawWaveOpacity)) / 100;
+        const waveDuration = mediaWavesSpeed === 'gentle' ? '5.4s' : (mediaWavesSpeed === 'moderate' || mediaWavesSpeed === 'dynamic' ? '3.0s' : '3.9s');
+        const waveDelay1 = '0s';
+        const waveDelay2 = mediaWavesSpeed === 'gentle' ? '-1.8s' : (mediaWavesSpeed === 'moderate' || mediaWavesSpeed === 'dynamic' ? '-1.0s' : '-1.3s');
+        const waveDelay3 = mediaWavesSpeed === 'gentle' ? '-3.6s' : (mediaWavesSpeed === 'moderate' || mediaWavesSpeed === 'dynamic' ? '-2.0s' : '-2.6s');
+        let borderRadius;
+        if (layout === 'horizontal') {
+          borderRadius = 'var(--bubble-border-radius, 100px)';
+        } else {
+          let bRadRaw = modCfg.card_border_radius !== undefined ? modCfg.card_border_radius : modCfg.border_radius;
+          borderRadius = (bRadRaw !== undefined && bRadRaw !== null && bRadRaw !== '') 
+            ? (typeof bRadRaw === 'number' ? (bRadRaw + 'px') : bRadRaw)
+            : '28px';
+        }
+
+        // Edge progress bar configuration
+        const showEdgeBar = modCfg.show_edge_bar !== undefined ? !!modCfg.show_edge_bar : true;
+        const edgeBarMode = modCfg.edge_bar_mode || 'auto';
+        const edgeBarThickness = modCfg.edge_bar_thickness || 'subtle';
+        const edgeBarHeight = edgeBarThickness === 'ultra_thin' ? '1.5px' : (edgeBarThickness === 'medium' ? '4px' : '2.5px');
+
+        // v2 Background Styling & Borders
+        const customBgColor = modCfg.custom_bg_color || '';
+        const syncLightColor = modCfg.sync_light_color !== undefined ? !!modCfg.sync_light_color : true;
+        const cardBorderStyle = modCfg.card_border_style || 'subtle';
+        const showConcentricRings = modCfg.show_concentric_rings || 'auto';
+        const cardShadowStyle = modCfg.card_shadow_style || 'none';
+
+        // Alert filters
+        const alertMotionEnabled = modCfg.alert_motion !== undefined ? !!modCfg.alert_motion : true;
+        const alertMoistureEnabled = modCfg.alert_moisture !== undefined ? !!modCfg.alert_moisture : true;
+        const alertDoorWinEnabled = modCfg.alert_door_window !== undefined ? !!modCfg.alert_door_window : true;
+        const alertSmokeGasEnabled = modCfg.alert_smoke_gas !== undefined ? !!modCfg.alert_smoke_gas : true;
+        const alertAirQualityEnabled = modCfg.alert_air_quality !== undefined ? !!modCfg.alert_air_quality : true;
+        const alertBatteryEnabled = modCfg.alert_battery !== undefined ? !!modCfg.alert_battery : true;
+        const rawBatThreshold = Number(modCfg.battery_alert_threshold);
+        const batteryThreshold = (!isNaN(rawBatThreshold) && rawBatThreshold > 0) ? rawBatThreshold : 15;
+        const testAlert = modCfg.test_alert || 'none';
+        let isMediaPlaying = testMediaWaves || testAlert === 'media';
+
+        // 2. Discover Entities strictly assigned to Area Registry
+        const tempValues = [];
+        let tempUnit = '\u00B0C';
+        const humValues = [];
+        const lightEntities = [];
+        let lightsOnCount = 0;
+        let onLightDetails = [];
+        const playingMediaVolumes = [];
+        const allMediaVolumes = [];
+        const mediaEntities = [];
+        const playingMediaEntities = [];
+        const activeMediaEntities = [];
+        let isMediaPaused = false;
+        const activeAlerts = [];
+        const lowBatteryList = [];
+        let climateState = null;
+        let openDoorsCount = 0;
+        // Simulated test alert if selected
+        if (testAlert === 'idle') {
+          // State 1: Night / Idle - All lights off, no active alert, no media playing
+          lightsOnCount = 0;
+          isMediaPlaying = false;
+          isMediaPaused = false;
+          activeAlerts.length = 0;
+          climateState = null;
+          tempValues.length = 0;
+          tempValues.push(20.8);
+          humValues.length = 0;
+          humValues.push(44);
+        } else if (testAlert === 'lights') {
+          // State 2: Warm lights on, 68% bar
+          lightsOnCount = 2;
+          onLightDetails.push({ id: 'light.test_warm1', isGroup: false, brightness: 68, rgb: null, kelvin: 2700 });
+          onLightDetails.push({ id: 'light.test_warm2', isGroup: false, brightness: 68, rgb: null, kelvin: 2700 });
+          tempValues.push(22.8);
+          humValues.push(46);
+        } else if (testAlert === 'media') {
+          // State 3: Media Player active, 72% cyan volume bar
+          isMediaPlaying = true;
+          playingMediaVolumes.push(72);
+          allMediaVolumes.push(72);
+          tempValues.push(22.8);
+          humValues.push(46);
+        } else if (testAlert === 'dual_sliders') {
+          // Dual Sliders: Both Lights 68% + Music 72% active
+          lightsOnCount = 2;
+          onLightDetails.push({ id: 'light.test_warm1', isGroup: false, brightness: 68, rgb: null, kelvin: 2700 });
+          onLightDetails.push({ id: 'light.test_warm2', isGroup: false, brightness: 68, rgb: null, kelvin: 2700 });
+          isMediaPlaying = true;
+          playingMediaVolumes.push(72);
+          allMediaVolumes.push(72);
+        } else if (testAlert === 'motion') {
+          // State 5: Motion detection (Motion icon + Radar pulse)
+          activeAlerts.push({ type: 'motion', icon: 'mdi:motion-sensor', label: i18n.motion, severity: 'warning' });
+          tempValues.push(22.5);
+          humValues.push(48);
+        } else if (testAlert === 'moisture') {
+          // State 6: Single Water Leak alert (Water icon + cyan pulse)
+          activeAlerts.push({ type: 'moisture', icon: 'mdi:water', label: i18n.moisture, severity: 'critical' });
+          tempValues.push(21.5);
+          humValues.push(50);
+        } else if (testAlert === 'smoke') {
+          // State 7: Critical Smoke / Fire alert (Fire icon + red halo & alarm pulse)
+          activeAlerts.push({ type: 'smoke', icon: 'mdi:fire', label: i18n.smokeDetected, severity: 'critical' });
+          tempValues.push(28.0);
+          humValues.push(35);
+        } else if (testAlert === 'door') {
+          // State 8: Open Door alert (Door open icon)
+          activeAlerts.push({ type: 'door', icon: 'mdi:door-open', label: i18n.door, severity: 'normal' });
+          tempValues.push(22.0);
+          humValues.push(45);
+        } else if (testAlert === 'window') {
+          // State 9: Open Window alert (Window open icon)
+          activeAlerts.push({ type: 'window', icon: 'mdi:window-open-variant', label: i18n.window || 'Fereastr\u0103', severity: 'normal' });
+          tempValues.push(22.0);
+          humValues.push(45);
+        } else if (testAlert === 'air_quality') {
+          // State 10: Air Quality CO2 high (1240 ppm CO2 filter icon)
+          activeAlerts.push({ type: 'air_quality', icon: 'mdi:air-filter', label: '1240 ppm CO2', severity: 'warning' });
+          tempValues.push(22.5);
+          humValues.push(45);
+        } else if (testAlert === 'climate_heating' || testAlert === 'climate') {
+          // State 11: Heating active at 22 deg
+          climateState = { icon: 'mdi:fire', color: '#e09638', label: `${i18n.heating} 22\u00B0`, targetTemp: '22', mode: 'heat' };
+          lightsOnCount = 2;
+          onLightDetails.push({ id: 'light.test_1', isGroup: false, brightness: 60, rgb: null, kelvin: 2700 });
+          tempValues.push(22.0);
+          humValues.push(44);
+        } else if (testAlert === 'climate_cooling') {
+          // State 12: AC Cooling active at 21 deg
+          climateState = { icon: 'mdi:snowflake', color: '#38bdf8', label: `${i18n.cooling} 21\u00B0`, targetTemp: '21', mode: 'cool' };
+          lightsOnCount = 2;
+          onLightDetails.push({ id: 'light.test_1', isGroup: false, brightness: 60, rgb: [56, 189, 248], kelvin: null });
+          tempValues.push(21.0);
+          humValues.push(48);
+        } else if (testAlert === 'battery') {
+          // State 13: Low Battery Warning (12% Battery alert icon)
+          activeAlerts.push({ 
+            type: 'battery', 
+            icon: 'mdi:battery-alert', 
+            label: `${i18n.lowBattery} (12%)`, 
+            severity: 'warning' 
+          });
+          tempValues.push(22.0);
+          humValues.push(48);
+        } else if (testAlert === 'multi_one') {
+          // Priority Test 1: Water Leak
+          activeAlerts.push({ type: 'moisture', icon: 'mdi:water', label: i18n.moisture, severity: 'critical' });
+          tempValues.push(22.0);
+          humValues.push(48);
+        } else if (testAlert === 'multi_two') {
+          // Priority Test 2: Leak overrides Motion
+          activeAlerts.push({ type: 'moisture', icon: 'mdi:water', label: i18n.moisture, severity: 'critical' });
+          activeAlerts.push({ type: 'motion', icon: 'mdi:motion-sensor', label: i18n.motion, severity: 'warning' });
+          tempValues.push(22.0);
+          humValues.push(48);
+        } else if (testAlert === 'multi_three') {
+          // Priority Test 3: Smoke overrides Leak + Motion
+          activeAlerts.push({ type: 'smoke', icon: 'mdi:fire', label: i18n.smokeDetected, severity: 'critical' });
+          activeAlerts.push({ type: 'moisture', icon: 'mdi:water', label: i18n.moisture, severity: 'critical' });
+          activeAlerts.push({ type: 'motion', icon: 'mdi:motion-sensor', label: i18n.motion, severity: 'warning' });
+          tempValues.push(22.0);
+          humValues.push(48);
+        } else if (testAlert === 'multi_four') {
+          // Priority Test 4: Smoke highest priority over Leak, Motion, Door
+          activeAlerts.push({ type: 'motion', icon: 'mdi:motion-sensor', label: i18n.motion, severity: 'warning' });
+          activeAlerts.push({ type: 'moisture', icon: 'mdi:water', label: i18n.moisture, severity: 'critical' });
+          activeAlerts.push({ type: 'smoke', icon: 'mdi:fire', label: i18n.smokeDetected, severity: 'critical' });
+          activeAlerts.push({ type: 'door', icon: 'mdi:door-open', label: i18n.door, severity: 'normal' });
+          tempValues.push(22.0);
+          humValues.push(48);
+        }
+
+        // Parse excluded entities / sensors (supports target object {entity_id: [...], device_id: [...]}, array, or comma-separated string)
+        const rawExcluded = modCfg.exclude_entities || modCfg.excluded_entities || modCfg.exclude_sensors || [];
+        const excludedList = [];
+        if (rawExcluded && typeof rawExcluded === 'object' && !Array.isArray(rawExcluded)) {
+          if (Array.isArray(rawExcluded.entity_id)) {
+            excludedList.push(...rawExcluded.entity_id);
+          } else if (typeof rawExcluded.entity_id === 'string') {
+            excludedList.push(rawExcluded.entity_id);
+          }
+          if (Array.isArray(rawExcluded.device_id)) {
+            const devIds = new Set(rawExcluded.device_id.map(d => String(d).toLowerCase()));
+            for (const [eId, reg] of Object.entries(entitiesMap)) {
+              if (reg && reg.device_id && devIds.has(String(reg.device_id).toLowerCase())) {
+                excludedList.push(eId);
+              }
+            }
+          }
+        } else if (Array.isArray(rawExcluded)) {
+          excludedList.push(...rawExcluded);
+        } else if (typeof rawExcluded === 'string') {
+          excludedList.push(...rawExcluded.split(','));
+        }
+        const excludedSet = new Set(excludedList.map(e => String(e || '').trim().toLowerCase()).filter(e => e.length > 0));
+
+        if (testAlert === 'none' || testAlert === 'dual_sliders') {
+          for (const [entityId, stateObj] of Object.entries(hassObj.states)) {
+            try {
+              if (!stateObj || stateObj.state === 'unavailable' || stateObj.state === 'unknown') continue;
+              if (excludedSet.has(entityId.toLowerCase())) continue;
+
+              let entityInArea = false;
+              const entReg = entitiesMap[entityId];
+
+              if (entReg) {
+                if (entReg.area_id && targetAreaId && entReg.area_id.toLowerCase() === targetAreaId.toLowerCase()) {
+                  entityInArea = true;
+                } else if (!entReg.area_id && entReg.device_id && devicesMap[entReg.device_id]) {
+                  const dev = devicesMap[entReg.device_id];
+                  if (dev.area_id && targetAreaId && dev.area_id.toLowerCase() === targetAreaId.toLowerCase()) {
+                    entityInArea = true;
+                  }
+                }
+              }
+
+              // If the card has a selected entity (e.g. Office Light), also include it
+              if (!entityInArea && cardConfig.entity === entityId) {
+                entityInArea = true;
+              }
+
+          if (!entityInArea) continue;
+
+          const domain = entityId.split('.')[0];
+          const devClass = (stateObj.attributes?.device_class || '').toLowerCase();
+          const unit = stateObj.attributes?.unit_of_measurement || '';
+
+          // Media Players / Smart Speakers
+          if (domain === 'media_player' && testAlert === 'none') {
+            mediaEntities.push(entityId);
+            const rawVol = stateObj.attributes?.volume_level;
+            const vol = (rawVol !== undefined && rawVol !== null) ? Math.round(Number(rawVol) * 100) : null;
+            if (stateObj.state === 'playing') {
+              isMediaPlaying = true;
+              playingMediaEntities.push(entityId);
+              if (vol !== null && !isNaN(vol)) {
+                playingMediaVolumes.push(Math.min(100, Math.max(0, vol)));
+              }
+            } else if (stateObj.state === 'paused') {
+              isMediaPaused = true;
+              activeMediaEntities.push(entityId);
+              if (vol !== null && !isNaN(vol)) {
+                allMediaVolumes.push(Math.min(100, Math.max(0, vol)));
+              }
+            } else if (['on', 'idle'].includes(stateObj.state)) {
+              activeMediaEntities.push(entityId);
+              if (vol !== null && !isNaN(vol)) {
+                allMediaVolumes.push(Math.min(100, Math.max(0, vol)));
+              }
+            }
+          }
+
+          // Lights (with group detection to avoid double counting)
+          if (domain === 'light' && testAlert === 'none') {
+            const isGroup = Array.isArray(stateObj.attributes?.entity_id);
+            lightEntities.push({ id: entityId, isGroup: isGroup, members: stateObj.attributes?.entity_id || [] });
+            if (stateObj.state === 'on') {
+              lightsOnCount++;
+              const rawBri = stateObj.attributes?.brightness;
+              let briVal = 100;
+              if (rawBri !== undefined && rawBri !== null) {
+                const b = Math.round((Number(rawBri) / 255) * 100);
+                if (!isNaN(b)) briVal = Math.min(100, Math.max(0, b));
+              }
+              const rawRgb = stateObj.attributes?.rgb_color;
+              const rgbVal = (Array.isArray(rawRgb) && rawRgb.length === 3) ? rawRgb : null;
+              const kelvinVal = stateObj.attributes?.color_temp_kelvin;
+              onLightDetails.push({ id: entityId, isGroup: isGroup, brightness: briVal, rgb: rgbVal, kelvin: kelvinVal });
+            }
+          }
+
+          // Temperature Sensors
+          if (domain === 'sensor' && (devClass === 'temperature' || ['\u00B0c', '\u00B0f', 'k', 'c', 'f'].includes(unit.toLowerCase()) || entityId.includes('temperature') || (stateObj.attributes?.friendly_name || '').toLowerCase().includes('temperature'))) {
+            const val = parseFloat(stateObj.state);
+            if (!isNaN(val)) {
+              tempValues.push(val);
+              if (unit) tempUnit = unit;
+            }
+          }
+
+          // Humidity Sensors (strictly exclude battery, memory, cpu)
+          const isBatteryOrSys = devClass === 'battery' || entityId.includes('battery') || entityId.includes('baterie') || entityId.includes('cpu') || entityId.includes('memory') || entityId.includes('disk');
+          if (domain === 'sensor' && !isBatteryOrSys && (devClass === 'humidity' || (unit === '%' && (entityId.includes('hum') || entityId.includes('umid') || (stateObj.attributes?.friendly_name || '').toLowerCase().includes('umid') || (stateObj.attributes?.friendly_name || '').toLowerCase().includes('humid'))))) {
+            const val = parseFloat(stateObj.state);
+            if (!isNaN(val)) {
+              humValues.push(val);
+            }
+          }
+
+          // Air Quality / CO2 Sensors (numeric sensor)
+          if (domain === 'sensor' && showAlerts && alertAirQualityEnabled && testAlert === 'none') {
+            const unitLower = String(unit || '').toLowerCase();
+            const fnameLower = String(stateObj.attributes?.friendly_name || '').toLowerCase();
+            const isCO2 = devClass === 'carbon_dioxide' || devClass === 'co2' || unitLower === 'ppm' || entityId.includes('co2') || fnameLower.includes('co2');
+            const isPM = ['pm25', 'pm10', 'pm1'].includes(devClass) || unitLower.includes('\u00B5g/m\u00B3') || unitLower.includes('ug/m3');
+            const isVOC = ['volatile_organic_compounds', 'voc', 'aqi'].includes(devClass) || entityId.includes('voc') || entityId.includes('aqi');
+            const val = parseFloat(stateObj.state);
+            if (!isNaN(val)) {
+              if (isCO2 && val >= 1000) {
+                activeAlerts.push({
+                  type: 'air_quality',
+                  icon: 'mdi:air-filter',
+                  label: `${i18n.co2High} (${Math.round(val)} ppm)`,
+                  severity: 'warning'
+                });
+              } else if (isPM && val > 25) {
+                activeAlerts.push({
+                  type: 'air_quality',
+                  icon: 'mdi:air-filter',
+                  label: `${i18n.airQuality} (${Math.round(val)} ${unit})`,
+                  severity: 'warning'
+                });
+              } else if (isVOC && val > 150) {
+                activeAlerts.push({
+                  type: 'air_quality',
+                  icon: 'mdi:air-filter',
+                  label: i18n.airQuality,
+                  severity: 'warning'
+                });
+              }
+            }
+          }
+
+          // Low Battery Detection (sensor, binary_sensor, or entity attribute)
+          if (showAlerts && alertBatteryEnabled && testAlert === 'none') {
+            let batVal = null;
+            const batFname = stateObj.attributes?.friendly_name || '';
+
+            if (domain === 'sensor' && (devClass === 'battery' || (unit === '%' && (entityId.includes('battery') || entityId.includes('baterie'))))) {
+              const num = parseFloat(stateObj.state);
+              if (!isNaN(num)) batVal = num;
+            } else if (domain === 'binary_sensor' && devClass === 'battery' && stateObj.state === 'on') {
+              batVal = 10;
+            } else {
+              const attrBat = stateObj.attributes?.battery_level !== undefined ? stateObj.attributes.battery_level : stateObj.attributes?.battery;
+              if (attrBat !== undefined && attrBat !== null) {
+                const num = parseFloat(attrBat);
+                if (!isNaN(num)) batVal = num;
+              }
+            }
+
+            if (batVal !== null && batVal <= batteryThreshold && batVal >= 0) {
+              const cleanName = batFname.replace(/battery|baterie|level|nivel/gi, '').trim() || batFname || entityId.split('.')[1];
+              lowBatteryList.push({
+                entityId: entityId,
+                name: cleanName,
+                level: Math.round(batVal)
+              });
+            }
+          }
+
+          // Alerts (Binary Sensors)
+          if (domain === 'binary_sensor' && showAlerts && testAlert === 'none') {
+            const isOn = stateObj.state === 'on';
+            if (isOn) {
+              if (alertMoistureEnabled && (devClass === 'moisture' || entityId.includes('water') || entityId.includes('leak'))) {
+                activeAlerts.push({
+                  type: 'moisture',
+                  icon: 'mdi:water',
+                  label: stateObj.attributes?.friendly_name || i18n.waterDetected,
+                  severity: 'critical'
+                });
+              } else if (alertSmokeGasEnabled && ['smoke', 'gas', 'carbon_monoxide'].includes(devClass)) {
+                activeAlerts.push({
+                  type: 'smoke',
+                  icon: 'mdi:fire-alert',
+                  label: stateObj.attributes?.friendly_name || i18n.smoke,
+                  severity: 'critical'
+                });
+              } else if (alertDoorWinEnabled && ['door', 'window', 'opening'].includes(devClass)) {
+                activeAlerts.push({
+                  type: 'door',
+                  icon: devClass === 'window' ? 'mdi:window-open-variant' : 'mdi:door-open',
+                  label: stateObj.attributes?.friendly_name || (devClass === 'window' ? i18n.window : i18n.open),
+                  severity: 'normal'
+                });
+              } else if (alertMotionEnabled && ['motion', 'occupancy'].includes(devClass)) {
+                activeAlerts.push({
+                  type: 'motion',
+                  icon: 'mdi:motion-sensor',
+                  label: i18n.motion,
+                  severity: 'warning'
+                });
+              } else if (alertAirQualityEnabled && (devClass === 'air_quality' || ((devClass === 'problem' || devClass === 'safety') && (entityId.includes('air') || entityId.includes('co2'))))) {
+                activeAlerts.push({
+                  type: 'air_quality',
+                  icon: 'mdi:air-filter',
+                  label: stateObj.attributes?.friendly_name || i18n.airQuality,
+                  severity: 'warning'
+                });
+              }
+            }
+          }
+
+          // Climate / Thermostat status
+          if (domain === 'climate' && !climateState && stateObj.state !== 'off' && stateObj.state !== 'unavailable') {
+            const action = stateObj.attributes?.hvac_action || stateObj.state;
+            const curTemp = stateObj.attributes?.current_temperature != null ? `${stateObj.attributes.current_temperature}\u00B0` : '';
+            const targetTemp = stateObj.attributes?.temperature != null ? String(stateObj.attributes.temperature) : null;
+            const isCooling = (action === 'cooling' || stateObj.state === 'cool');
+            const mode = isCooling ? 'cool' : 'heat';
+            climateState = { 
+              icon: isCooling ? 'mdi:snowflake' : 'mdi:fire', 
+              color: isCooling ? '#38bdf8' : '#e09638', 
+              mode: mode,
+              targetTemp: targetTemp,
+              label: `${isCooling ? i18n.cooling : i18n.heating} ${curTemp}`.trim() 
+            };
+          }
+
+          // Open doors/windows count
+          if (showDoorBadge && domain === 'binary_sensor' && stateObj.state === 'on' && ['door', 'window', 'opening'].includes(devClass)) {
+            openDoorsCount++;
+          }
+        } catch (entErr) {
+          // Silently continue if an entity in this room has malformed attributes
+        }
+      }
+    }
+
+        if (testAlert === 'dual_sliders') {
+          if (tempValues.length === 0) tempValues.push(22.5);
+          if (humValues.length === 0) humValues.push(46);
+        }
+
+        // Helper: Calculate values (Median, Mean, Min, Max)
+        const computeStat = (arr, mode) => {
+          if (!arr || arr.length === 0) return null;
+          if (arr.length === 1) return arr[0];
+          const sorted = arr.slice().sort((a, b) => a - b);
+          if (mode === 'min') return sorted[0];
+          if (mode === 'max') return sorted[sorted.length - 1];
+          if (mode === 'mean') {
+            const sum = sorted.reduce((acc, v) => acc + v, 0);
+            return sum / sorted.length;
+          }
+          const mid = Math.floor(sorted.length / 2);
+          return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+        };
+
+        const calcTemp = computeStat(tempValues, tempCalcMode);
+        const calcHum = computeStat(humValues, humCalcMode);
+
+        const tempStr = calcTemp != null ? `${Number.isInteger(calcTemp) ? calcTemp : calcTemp.toFixed(1)} ${tempUnit}` : '';
+        const humStr = calcHum != null ? `${Math.round(calcHum)}%` : '';
+
+        let sensorSummary = '';
+        if (showTemp && showHum && tempStr && humStr) {
+          sensorSummary = `${tempStr} <span class="bac-sub-sep">&bull;</span> ${humStr}`;
+        } else if (showTemp && tempStr) {
+          sensorSummary = tempStr;
+        } else if (showHum && humStr) {
+          sensorSummary = humStr;
+        }
+
+        // Deduplicate light groups: don't double count a group and its members
+        const groupEntities = lightEntities.filter(l => l.isGroup);
+        const singleEntities = lightEntities.filter(l => !l.isGroup);
+        if (groupEntities.length > 0 && singleEntities.length > 0) {
+          let singleOnCount = 0;
+          singleEntities.forEach(l => {
+            if (hassObj.states[l.id]?.state === 'on') singleOnCount++;
+          });
+          lightsOnCount = singleOnCount;
+          if (singleOnCount === 0) {
+            onLightDetails = [];
+          } else {
+            onLightDetails = onLightDetails.filter(l => !l.isGroup);
+          }
+        }
+
+        // Process & Register Low Battery Alert
+        if (lowBatteryList.length > 0 && testAlert === 'none') {
+          // Sort by lowest battery percentage first
+          lowBatteryList.sort((a, b) => a.level - b.level);
+          // Dedup by clean name so attribute + entity of same device isn't counted twice
+          const seenBatNames = new Set();
+          const uniqueLowBats = [];
+          for (const b of lowBatteryList) {
+            const key = b.name.toLowerCase();
+            if (!seenBatNames.has(key)) {
+              seenBatNames.add(key);
+              uniqueLowBats.push(b);
+            }
+          }
+          if (uniqueLowBats.length > 0) {
+            const lowest = uniqueLowBats[0];
+            const isCrit = lowest.level <= 10;
+            const count = uniqueLowBats.length;
+            const label = count === 1 
+              ? `${lowest.name}: ${lowest.level}%` 
+              : `${count} ${i18n.battery} (${lowest.level}%)`;
+            activeAlerts.push({
+              type: 'battery',
+              icon: isCrit ? 'mdi:battery-alert' : 'mdi:battery-low',
+              label: label,
+              severity: isCrit ? 'critical' : 'warning'
+            });
+          }
+        }
+
+        // Deduplicate alerts by type (e.g. avoid multiple air_quality alerts if both CO2 and PM2.5 sensors trigger)
+        const dedupedAlerts = [];
+        const seenAlertTypes = new Set();
+        for (const a of activeAlerts) {
+          if (!seenAlertTypes.has(a.type)) {
+            seenAlertTypes.add(a.type);
+            dedupedAlerts.push(a);
+          }
+        }
+        dedupedAlerts.sort((a, b) => (b.severity === 'critical' ? 1 : 0) - (a.severity === 'critical' ? 1 : 0));
+        const finalAlerts = dedupedAlerts;
+        const primaryAlert = finalAlerts.length > 0 ? finalAlerts[0] : null;
+
+        // Lights State & Warm Glow
+        const hasLights = lightEntities.length > 0;
+        const lightsAreOn = lightsOnCount > 0;
+        const isGlowActive = (glowStyle !== 'none') && (enableLightGlow !== false) && lightsAreOn;
+
+        // Dynamic RGB / Temperature Color Sync from Room Lights
+        let activeLightRgb = null;
+        if (syncLightColor && lightsAreOn) {
+          const rgbLight = onLightDetails.find(l => l.rgb);
+          if (rgbLight) {
+            activeLightRgb = rgbLight.rgb;
+          } else {
+            const kelvinLight = onLightDetails.find(l => l.kelvin);
+            if (kelvinLight) {
+              const k = kelvinLight.kelvin;
+              if (k <= 2700) activeLightRgb = [255, 175, 40];
+              else if (k <= 3500) activeLightRgb = [255, 195, 70];
+              else if (k <= 4500) activeLightRgb = [255, 220, 150];
+              else activeLightRgb = [210, 235, 255];
+            }
+          }
+        }
+        const glowRgb = activeLightRgb ? activeLightRgb.join(', ') : '255, 195, 45';
+
+        // v2 Card Background, Border, Shadow and Frosted Glass Styling
+        let cardBgCss = '';
+        let cardBorderCss = '';
+        let cardShadowCss = '';
+        let backdropFilterCss = '';
+
+        if (customBgColor && customBgColor.trim() !== '') {
+          cardBgCss = `background: ${customBgColor.trim()} !important; opacity: 1 !important;`;
+        }
+
+        if (cardShadowStyle === 'none') {
+          cardShadowCss = 'box-shadow: none !important;';
+        } else if (cardShadowStyle === 'subtle') {
+          cardShadowCss = 'box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.25) !important;';
+        } else if (cardShadowStyle === 'elevated') {
+          cardShadowCss = 'box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.45) !important;';
+        }
+
+        if (cardBorderStyle === 'none') {
+          cardBorderCss = 'border: none !important;';
+        } else if (cardBorderStyle === 'accent' || (glowStyle === 'accent_border' && isGlowActive)) {
+          if (isGlowActive) {
+            cardBorderCss = `border: 1.5px solid rgba(${glowRgb}, 0.55) !important;`;
+            cardShadowCss = `box-shadow: 0 0 18px rgba(${glowRgb}, 0.22) !important;`;
+          } else {
+            cardBorderCss = 'border: 1px solid rgba(255, 255, 255, 0.08) !important;';
+          }
+        } else if (cardBorderStyle === 'subtle') {
+          cardBorderCss = 'border: 1px solid rgba(255, 255, 255, 0.10) !important;';
+        }
+
+        // Presence Pulse Wave
+        const hasMotion = finalAlerts.some(a => a.type === 'motion');
+
+        // Adaptive background image brightness
+        let bgOpacity = '0.25';
+        let bgFilter = 'blur(1px)';
+        if (showBgImg && adaptiveBgBrightness) {
+          bgOpacity = lightsAreOn ? '0.42' : '0.16';
+          bgFilter = lightsAreOn ? 'blur(0.5px) brightness(0.95) saturate(1.15)' : 'blur(1.5px) brightness(0.42) saturate(0.8)';
+        }
+
+        // Edge Progress Bar (Brightness / Volume)
+        let avgLightBrightness = null;
+        const activeSingles = onLightDetails.filter(l => !l.isGroup);
+        const lightsForBrightness = activeSingles.length > 0 ? activeSingles : onLightDetails;
+        if (lightsForBrightness.length > 0 && lightsAreOn) {
+          const sumBri = lightsForBrightness.reduce((acc, l) => acc + l.brightness, 0);
+          avgLightBrightness = Math.round(sumBri / lightsForBrightness.length);
+        }
+
+        let currentMediaVolume = null;
+        if (playingMediaVolumes.length > 0) {
+          currentMediaVolume = playingMediaVolumes[0];
+        } else if (allMediaVolumes.length > 0) {
+          currentMediaVolume = allMediaVolumes[0];
+        }
+
+        let edgeBarType = null;
+        let edgeBarPercent = 0;
+        if (showEdgeBar) {
+          if (edgeBarMode === 'media' && currentMediaVolume !== null) {
+            edgeBarType = 'media';
+            edgeBarPercent = currentMediaVolume;
+          } else if (edgeBarMode === 'lights' && lightsAreOn && avgLightBrightness !== null) {
+            edgeBarType = 'lights';
+            edgeBarPercent = avgLightBrightness;
+          } else if (edgeBarMode === 'auto') {
+            if (isMediaPlaying && currentMediaVolume !== null) {
+              edgeBarType = 'media';
+              edgeBarPercent = currentMediaVolume;
+            } else if (lightsAreOn && avgLightBrightness !== null) {
+              edgeBarType = 'lights';
+              edgeBarPercent = avgLightBrightness;
+            }
+          }
+        }
+
+        // 3. Resolve Container & Enforce Minimum Height
+        let container = null;
+        if (ctx.elements && ctx.elements.mainContainer && ctx.elements.mainContainer.style) {
+          container = ctx.elements.mainContainer;
+        } else if (cardObj && typeof cardObj.querySelector === 'function') {
+          container = cardObj.querySelector('.bubble-button-card-container') 
+            || cardObj.querySelector('.bubble-container');
+        }
+        if (!container && cardObj && cardObj.style && typeof cardObj.querySelector === 'function') {
+          container = cardObj;
+        }
+
+        if (!container || !container.style) return '';
+
+        // Synchronize --row-size with Home Assistant Layout configuration
+        const configuredRows = cardConfig.grid_options?.rows || cardConfig.rows || null;
+        if (configuredRows && configuredRows !== 'auto') {
+          container.style.setProperty('--row-size', configuredRows);
+        }
+
+        // Clean up inline styles so Bubble Card and CSS rules govern layout smoothly without restrictions
+        container.style.removeProperty('height');
+        container.style.removeProperty('min-height');
+        container.style.removeProperty('aspect-ratio');
+
+        if (cardObj && cardObj.style) {
+          cardObj.style.removeProperty('height');
+          cardObj.style.removeProperty('display');
+          cardObj.style.removeProperty('flex-direction');
+        }
+
+        // Isolated state per container
+        container._bac = container._bac || {};
+        const bac = container._bac;
+
+        // Clean up any previously attached custom click listeners to let Bubble Card native tap/hold actions work seamlessly
+        if (bac.tapHandler) {
+          container.removeEventListener('click', bac.tapHandler);
+          bac.tapHandler = null;
+        }
+        bac.tapBound = false;
+
+        // 4. Inject or Update DOM
+        let areaCardEl = container.querySelector('.bac-area-card');
+        if (!areaCardEl) {
+          areaCardEl = document.createElement('div');
+          container.appendChild(areaCardEl);
+        }
+        areaCardEl.className = 'bac-area-card bac-card-layout-' + layout;
+
+        // 1. Top-Left Climate Capsule (Thermostat mode & target temperature)
+        let cardClimateChipHtml = '';
+        if (climateState && (showClimateBadge || testAlert.startsWith('climate') || testAlert === 'climate')) {
+          const isCool = climateState.mode === 'cool' || testAlert === 'climate_cooling';
+          const tempVal = climateState.targetTemp ? `${climateState.targetTemp}&deg;` : (isCool ? '21&deg;' : '22&deg;');
+          cardClimateChipHtml = `
+            <div class="bac-card-climate-chip ${isCool ? 'bac-climate-cooling' : 'bac-climate-heating'}" title="${climateState.label}">
+              <ha-icon icon="${climateState.icon}"></ha-icon>
+              <span class="bac-climate-temp">${tempVal}</span>
+            </div>
+          `;
+        }
+
+        // 1.2. Dynamic Central Icon Replacement for Active Alerts (v3)
+        // Orbit badges are removed. When alerts are active and dynamic icon is enabled (or default),
+        // the main room icon switches dynamically to the highest-priority active alert's icon.
+        const isDynamicIconActive = showAlerts && (alertStyle === 'dynamic_icon' || alertStyle === 'icon_badge' || alertStyle === 'both' || !alertStyle) && primaryAlert;
+        const currentIcon = isDynamicIconActive ? primaryAlert.icon : areaIcon;
+        const alertIconClass = isDynamicIconActive ? `bac-icon-has-alert bac-alert-${primaryAlert.type} bac-alert-${primaryAlert.severity || 'warning'}` : '';
+
+        // 2. Text Pills for Subtitle (when subtitle_badge or both is chosen)
+        const alertPillsHtml = finalAlerts.length > 0 
+          ? finalAlerts.slice(0, 2).map(a => `
+              <div class="bac-alert-badge bac-alert-${a.type} bac-alert-${a.severity}">
+                <ha-icon icon="${a.icon}"></ha-icon>
+                <span class="bac-alert-label">${a.label}</span>
+              </div>
+            `).join(' ') 
+          : '';
+
+        // 3. Top-Right Lights Capsule (glowing amber dots - absent when idle)
+        let cardLightChipHtml = '';
+        let activeDotCount = lightsOnCount;
+        if (testAlert === 'idle') {
+          activeDotCount = 0;
+        } else if (activeDotCount === 0 && ['lights', 'moisture', 'air_quality', 'climate_heating', 'climate_cooling', 'climate', 'dual_sliders'].includes(testAlert)) {
+          activeDotCount = 2; // Match the 2 dots in mockups during test modes
+        }
+
+        if (activeDotCount > 0 && lightIndicatorStyle !== 'none' && lightIndicatorStyle !== 'subtitle') {
+          let dotsHtml = '';
+          const maxDots = 3;
+          const count = Math.min(activeDotCount, maxDots);
+          for (let i = 0; i < count; i++) {
+            dotsHtml += '<span class="bac-light-dot"></span>';
+          }
+          if (activeDotCount > maxDots) {
+            dotsHtml += `<span class="bac-light-count">${activeDotCount}</span>`;
+          }
+          const chipPosClass = (lightIndicatorStyle === 'above_icon') ? 'bac-chip-above-icon' : '';
+          const onLightsNames = onLightDetails.map(l => (hassObj.states[l.id]?.attributes?.friendly_name || l.id.replace('light.', ''))).join(', ');
+          cardLightChipHtml = `
+            <div class="bac-card-light-chip ${chipPosClass}" title="${activeDotCount} ${activeDotCount === 1 ? i18n.lightSingular : i18n.lightPlural}${onLightsNames ? ': ' + onLightsNames : ''}">
+              ${dotsHtml}
+            </div>
+          `;
+        }
+
+        // 4. Center Halo behind Icon
+        let haloType = 'amber';
+        let isHaloActive = false;
+        if (testAlert === 'smoke' || finalAlerts.some(a => a.type === 'smoke')) {
+          haloType = 'red';
+          isHaloActive = true;
+        } else if (testAlert === 'moisture' || finalAlerts.some(a => a.type === 'moisture')) {
+          haloType = 'cyan';
+          isHaloActive = true;
+        } else if (testAlert === 'climate_cooling' || (climateState && climateState.mode === 'cool')) {
+          haloType = 'cyan';
+          isHaloActive = true;
+        } else if (testAlert === 'media' || isMediaPlaying) {
+          haloType = 'cyan';
+          isHaloActive = true;
+        } else if (testAlert === 'air_quality') {
+          haloType = 'teal';
+          isHaloActive = true;
+        } else if (testAlert === 'idle') {
+          isHaloActive = false;
+        } else if (lightsAreOn || isGlowActive || ['lights', 'moisture', 'climate_heating', 'climate', 'dual_sliders'].includes(testAlert)) {
+          haloType = 'amber';
+          isHaloActive = (glowStyle === 'center_aura' || glowStyle === 'warm_ambient');
+        }
+        const iconHaloHtml = isHaloActive ? `<div class="bac-icon-halo bac-halo-${haloType}"></div>` : '';
+
+        // 4.5. Ambient Soft Mesh Breathing Glow (Organic Depth)
+        let meshGlowHtml = '';
+        if (enableMeshGlow && testAlert !== 'idle') {
+          let meshClass = '';
+          if (testAlert === 'smoke' || finalAlerts.some(a => a.type === 'smoke')) {
+            meshClass = 'bac-mesh-crimson';
+          } else if (testAlert === 'media' || isMediaPlaying) {
+            meshClass = 'bac-mesh-cyan';
+          } else if (testAlert === 'climate_cooling' || (climateState && climateState.mode === 'cool')) {
+            meshClass = 'bac-mesh-cyan';
+          } else if ((glowStyle === 'warm_ambient') && (lightsAreOn || isGlowActive || ['lights', 'climate_heating'].includes(testAlert))) {
+            meshClass = (syncLightColor && activeLightRgb) ? 'bac-mesh-dynamic' : 'bac-mesh-amber';
+          }
+
+          if (meshClass) {
+            meshGlowHtml = `<div class="bac-mesh-glow ${meshClass}"></div>`;
+          }
+        }
+
+        // 5. Background Animated Circle / Radar Pulse (Presence v4 Animation)
+        const hasSmokeAlert = (testAlert === 'smoke') || finalAlerts.some(a => a.type === 'smoke');
+        const hasMoistureAlert = (testAlert === 'moisture') || (!hasMotion && finalAlerts.some(a => a.type === 'moisture'));
+        const hasMotionAlert = hasMotion || testAlert === 'motion';
+        const showRings = (showConcentricRings === 'always') || hasMotionAlert || hasMoistureAlert || hasSmokeAlert;
+        const isRadarPulsing = enablePresencePulse && (hasMotionAlert || hasMoistureAlert || hasSmokeAlert);
+        const radarColor = hasSmokeAlert 
+          ? '#ef4444' 
+          : (hasMoistureAlert ? '#38bdf8' : '#f59e0b');
+        const concentricRingsHtml = showRings ? `
+          <div class="bac-concentric-rings ${isRadarPulsing ? 'bac-radar-active' : ''}" style="--radar-color: ${radarColor};">
+            <span class="bac-ring bac-ring-1"></span>
+          </div>
+        ` : '';
+
+        // 6. Corner Concentric Waves - ONLY active when media is playing or explicitly tested
+        const isMediaActive = isMediaPlaying || testMediaWaves || testAlert === 'media';
+        const mediaStyleVal = modCfg.media_waves_style || 'soft_cyan';
+        const wavesColorClass = 'bac-waves-' + mediaStyleVal;
+        const showCornerWaves = showMediaWaves && isMediaActive;
+
+        const mediaCornerWavesHtml = showCornerWaves ? `
+          <div class="bac-media-surround-waves bac-waves-${mediaWavesType} ${wavesColorClass}" title="...">
+            <div class="bac-corner-unit bac-corner-tl">
+              <span class="bac-wave bac-wave-1"></span>
+              <span class="bac-wave bac-wave-2"></span>
+              <span class="bac-wave bac-wave-3"></span>
+            </div>
+            <div class="bac-corner-unit bac-corner-tr">
+              <span class="bac-wave bac-wave-1"></span>
+              <span class="bac-wave bac-wave-2"></span>
+              <span class="bac-wave bac-wave-3"></span>
+            </div>
+            <div class="bac-corner-unit bac-corner-bl">
+              <span class="bac-wave bac-wave-1"></span>
+              <span class="bac-wave bac-wave-2"></span>
+              <span class="bac-wave bac-wave-3"></span>
+            </div>
+            <div class="bac-corner-unit bac-corner-br">
+              <span class="bac-wave bac-wave-1"></span>
+              <span class="bac-wave bac-wave-2"></span>
+              <span class="bac-wave bac-wave-3"></span>
+            </div>
+          </div>
+        ` : '';
+
+        // 7. Floating Bottom Progress Bar (Edge Bar) & Dual Swap (Auto-Hide)
+        const hasMediaActive = (testAlert === 'media') || (testAlert === 'dual_sliders') || isMediaPlaying || (currentMediaVolume !== null && (isMediaPlaying || isMediaPaused));
+        const hasLightsActive = (testAlert === 'lights') || (testAlert === 'dual_sliders') || lightsAreOn || (testAlert === 'climate_heating');
+        let isDualEdgeBar = (testAlert === 'dual_sliders') || (showEdgeBar && hasMediaActive && hasLightsActive && (edgeBarMode === 'auto'));
+
+        let showProgress = false;
+        let finalPercent = 0;
+        let finalBarType = 'lights';
+        let mediaPercent = (currentMediaVolume !== null) ? currentMediaVolume : 72;
+        let lightsPercent = (avgLightBrightness !== null) ? avgLightBrightness : (lightsAreOn ? 100 : 68);
+
+        if (testAlert === 'idle' || testAlert === 'smoke' || testAlert === 'climate_cooling' || testAlert === 'moisture') {
+          showProgress = false;
+        } else if (testAlert === 'dual_sliders') {
+          showProgress = true;
+          isDualEdgeBar = true;
+          lightsPercent = 68;
+          mediaPercent = 72;
+        } else if (testAlert === 'lights') {
+          showProgress = true; finalPercent = 68; finalBarType = 'lights'; lightsPercent = 68;
+        } else if (testAlert === 'media') {
+          showProgress = true; finalPercent = 72; finalBarType = 'media'; mediaPercent = 72;
+        } else if (testAlert === 'climate_heating') {
+          showProgress = true; finalPercent = 60; finalBarType = 'lights'; lightsPercent = 60;
+        } else if (showEdgeBar) {
+          if (isDualEdgeBar) {
+            showProgress = true;
+          } else if (hasMediaActive && (edgeBarMode === 'auto' || edgeBarMode === 'media')) {
+            showProgress = true;
+            finalPercent = mediaPercent;
+            finalBarType = 'media';
+          } else if (hasLightsActive && (edgeBarMode === 'auto' || edgeBarMode === 'lights')) {
+            showProgress = true;
+            finalPercent = lightsPercent;
+            finalBarType = 'lights';
+          } else {
+            // Option A: When lights are off and no media is active, slider is completely hidden
+            showProgress = false;
+          }
+        } else {
+          showProgress = false;
+        }
+
+        let kelvinClass = '';
+        const lPct = isDualEdgeBar ? lightsPercent : finalPercent;
+        if (lPct <= 35) {
+          kelvinClass = 'bac-edge-kelvin-dim';
+        } else if (lPct <= 70) {
+          kelvinClass = 'bac-edge-kelvin-warm';
+        } else {
+          kelvinClass = 'bac-edge-kelvin-bright';
+        }
+        const mediaKelvinClass = isMediaPaused ? 'bac-edge-media-paused' : '';
+
+        let edgeProgressBarHtml = '';
+        if (showProgress) {
+          if (isDualEdgeBar) {
+            const currentSlot = bac.activeBarSlot || 'media';
+            edgeProgressBarHtml = `
+              <div class="bac-edge-progress-container bac-edge-dual ${currentSlot === 'lights' ? 'bac-dual-active-lights' : 'bac-dual-active-media'}" title="${isRo ? 'Glisa\u021bi pentru reglare \u2022 Dublu tap: comut\u0103' : 'Slide to adjust \u2022 Double tap: swap'}">
+                <div class="bac-edge-swap-tooltip"></div>
+                <div class="bac-edge-track-wrapper bac-track-slot-media">
+                  <div class="bac-edge-progress-track">
+                    <div class="bac-edge-progress-fill bac-edge-fill-media ${mediaKelvinClass}" style="width: ${mediaPercent}%;"></div>
+                  </div>
+                </div>
+                <div class="bac-edge-track-wrapper bac-track-slot-lights">
+                  <div class="bac-edge-progress-track">
+                    <div class="bac-edge-progress-fill bac-edge-fill-lights ${kelvinClass}" style="width: ${lightsPercent}%;"></div>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            edgeProgressBarHtml = `
+              <div class="bac-edge-progress-container bac-edge-single bac-edge-type-${finalBarType} ${finalBarType === 'lights' ? kelvinClass : mediaKelvinClass}" title="${isRo ? 'Glisa\u021bi pentru reglare' : 'Slide to adjust'}">
+                <div class="bac-edge-swap-tooltip"></div>
+                <div class="bac-edge-track-wrapper bac-track-slot-single">
+                  <div class="bac-edge-progress-track">
+                    <div class="bac-edge-progress-fill ${finalBarType === 'lights' ? 'bac-edge-fill-lights ' + kelvinClass : 'bac-edge-fill-media ' + mediaKelvinClass}" style="width: ${finalPercent}%;"></div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        // Helper: Format active alerts with distinct vibrant luminous color per alert type
+        const buildAlertsSubtitle = (alerts) => {
+          if (!alerts || alerts.length === 0) return '';
+          return alerts.slice(0, 3).map(a => {
+            const cls = `bac-sub-${a.type || (a.severity === 'critical' ? 'smoke' : 'motion')}`;
+            return `<span class="${cls}">${a.label}</span>`;
+          }).join(` <span class="bac-sub-sep">&bull;</span> `);
+        };
+
+        // 8. Subtitle Text Resolution
+        let subtitleText = '';
+        if (testAlert === 'smoke') {
+          const smokeTxt = `<span class="bac-sub-smoke">${i18n.smokeDetected}</span>`;
+          subtitleText = sensorSummary ? `${smokeTxt} <span class="bac-sub-sep">&bull;</span> ${sensorSummary}` : smokeTxt;
+        } else if (testAlert === 'air_quality') {
+          const co2Txt = `<span class="bac-sub-air_quality">1240 ppm CO2</span>`;
+          subtitleText = sensorSummary ? `${co2Txt} <span class="bac-sub-sep">&bull;</span> ${sensorSummary}` : co2Txt;
+        } else if (testAlert === 'idle' || testAlert === 'lights' || testAlert === 'media') {
+          subtitleText = sensorSummary;
+        } else if (testAlert === 'moisture') {
+          const moistTxt = `<span class="bac-sub-moisture">${i18n.moisture}</span>`;
+          subtitleText = sensorSummary ? `${moistTxt} <span class="bac-sub-sep">&bull;</span> ${sensorSummary}` : moistTxt;
+        } else if (['multi_one', 'multi_two', 'multi_three', 'multi_four', 'motion', 'door', 'window', 'battery'].includes(testAlert)) {
+          const alertTxt = buildAlertsSubtitle(finalAlerts);
+          subtitleText = sensorSummary ? `${alertTxt} <span class="bac-sub-sep">&bull;</span> ${sensorSummary}` : alertTxt;
+        } else if (testAlert === 'dual_sliders') {
+          subtitleText = sensorSummary || `22.5 ${tempUnit} <span class="bac-sub-sep">&bull;</span> 46%`;
+        } else if (testAlert === 'climate_heating' || testAlert === 'climate' || testAlert === 'climate_cooling') {
+          subtitleText = sensorSummary;
+        } else if (layout === 'minimal' || subtitleMode === 'none') {
+          subtitleText = '';
+        } else if (finalAlerts.length > 0 && alertStyle === 'subtitle_badge') {
+          subtitleText = sensorSummary ? `${alertPillsHtml} <span class="bac-sub-sep">&bull;</span> ${sensorSummary}` : alertPillsHtml;
+        } else if (finalAlerts.length > 0 && alertStyle === 'both') {
+          subtitleText = `${alertPillsHtml} <span class="bac-sub-sep">&bull;</span> ${sensorSummary || (lightsAreOn ? `${lightsOnCount} ${i18n.lightsOnShort}` : '')}`;
+        } else if (finalAlerts.length > 0 && finalAlerts.some(a => a.severity === 'critical')) {
+          // Critical alerts (smoke/leak) take visual priority in subtitle
+          const critSub = buildAlertsSubtitle(finalAlerts);
+          subtitleText = sensorSummary ? `${critSub} <span class="bac-sub-sep">&bull;</span> ${sensorSummary}` : critSub;
+        } else if (subtitleMode === 'lights') {
+          subtitleText = lightsAreOn ? `${lightsOnCount} ${lightsOnCount === 1 ? i18n.lightSingular : i18n.lightPlural}` : (hasLights ? i18n.allOff : '');
+        } else if (subtitleMode === 'combined') {
+          const lText = lightsAreOn ? `<span class="bac-sub-light"><ha-icon icon="mdi:lightbulb"></ha-icon><span>${lightsOnCount}</span></span>` : '';
+          subtitleText = sensorSummary ? (lText ? `${sensorSummary} <span class="bac-sub-sep">&bull;</span> ${lText}` : sensorSummary) : lText;
+        } else {
+          // Default: 'sensors' (Temperature & Humidity)
+          if (finalAlerts.length > 0) {
+            const alertsSub = buildAlertsSubtitle(finalAlerts);
+            subtitleText = sensorSummary ? `${alertsSub} <span class="bac-sub-sep">&bull;</span> ${sensorSummary}` : alertsSub;
+          } else if (sensorSummary) {
+            subtitleText = sensorSummary;
+          } else {
+            subtitleText = '';
+          }
+        }
+
+        if (lightIndicatorStyle === 'subtitle' && activeDotCount > 0 && !subtitleText.includes(i18n.lightSingular) && !subtitleText.includes('💡')) {
+          const lLabel = `${activeDotCount} ${activeDotCount === 1 ? i18n.lightSingular : i18n.lightPlural}`;
+          subtitleText = subtitleText ? `${subtitleText} <span class="bac-sub-sep">&bull;</span> <span class="bac-sub-light">💡 ${lLabel}</span>` : `💡 ${lLabel}`;
+        }
+
+        if (layout === 'minimal' || subtitleMode === 'none') {
+          subtitleText = '';
+        }
+
+        // Detect if room is fully dormant/idle for clean styling
+        const isRoomIdle = (testAlert === 'idle') || (!lightsAreOn && !isGlowActive && !isMediaPlaying && finalAlerts.length === 0 && !climateState);
+
+        // Assemble Inner DOM (Protected against re-render interruption during dragging)
+        if (!bac._isSliding) {
+          bac._pendingRender = false;
+          areaCardEl.innerHTML = `
+            ${(showBgImg && areaPicture) ? `<div class="bac-bg-picture" style="background-image: url('${areaPicture}');"></div>` : ''}
+            ${meshGlowHtml}
+            ${cardClimateChipHtml}
+            ${cardLightChipHtml}
+            ${mediaCornerWavesHtml}
+            ${edgeProgressBarHtml}
+            <div class="bac-content-wrapper bac-layout-${layout}">
+              <div class="bac-icon-badge-row">
+                <div class="bac-main-icon-container ${alertIconClass}">
+                  ${showIconCircle ? `<div class="bac-icon-frosted-circle ${isRoomIdle ? 'bac-circle-smoked' : ''} ${(!isRoomIdle && enableCircleDepth) ? 'bac-circle-depth' : ''}"></div>` : ''}
+                  ${concentricRingsHtml}
+                  ${iconHaloHtml}
+                  <ha-icon class="bac-main-ha-icon" icon="${currentIcon}"></ha-icon>
+                </div>
+              </div>
+              <div class="bac-text-container">
+                <div class="bac-area-title">${areaName}</div>
+                ${subtitleText ? `<div class="bac-area-subtitle"><span class="bac-subtitle-content">${subtitleText}</span></div>` : ''}
+              </div>
+            </div>
+          `;
+        } else {
+          bac._pendingRender = true;
+        }
+
+        // 4.9. Attach Interactive Touch & Drag Slider Surface + Double-Tap Swap
+        const edgeBarEl = areaCardEl.querySelector('.bac-edge-progress-container');
+        if (edgeBarEl) {
+          const isDual = edgeBarEl.classList.contains('bac-edge-dual');
+          const tipEl = edgeBarEl.querySelector('.bac-edge-swap-tooltip');
+
+          const showTip = (text) => {
+            if (!tipEl) return;
+            tipEl.textContent = text;
+            tipEl.classList.remove('bac-tip-show');
+            void tipEl.offsetWidth; // trigger reflow
+            tipEl.classList.add('bac-tip-show');
+            if (bac._tipTimer) clearTimeout(bac._tipTimer);
+            bac._tipTimer = setTimeout(() => {
+              tipEl.classList.remove('bac-tip-show');
+            }, 1200);
+          };
+
+          const triggerSwap = (e) => {
+            if (e) {
+              if (typeof e.stopPropagation === 'function') e.stopPropagation();
+              if (typeof e.preventDefault === 'function') e.preventDefault();
+            }
+            if (!isDual) return;
+            const isCurrentlyMedia = edgeBarEl.classList.contains('bac-dual-active-media');
+            if (isCurrentlyMedia) {
+              edgeBarEl.classList.remove('bac-dual-active-media');
+              edgeBarEl.classList.add('bac-dual-active-lights');
+              bac.activeBarSlot = 'lights';
+            } else {
+              edgeBarEl.classList.remove('bac-dual-active-lights');
+              edgeBarEl.classList.add('bac-dual-active-media');
+              bac.activeBarSlot = 'media';
+            }
+
+            const isLightsNow = (bac.activeBarSlot === 'lights');
+            showTip(isLightsNow ? `💡 ${isRo ? 'Lumini' : 'Lights'}: ${lightsPercent}%` : `🎵 ${isRo ? 'Volum' : 'Volume'}: ${mediaPercent}%`);
+          };
+
+          const updateValue = (pct, isFinal) => {
+            const isLightsActive = isDual ? (bac.activeBarSlot === 'lights') : (finalBarType === 'lights');
+            
+            // 1. Update active fill element visually immediately (60fps)
+            if (isLightsActive) {
+              lightsPercent = Math.max(1, Math.min(100, pct));
+              const fill = edgeBarEl.querySelector('.bac-dual-active-lights .bac-track-slot-lights .bac-edge-progress-fill, .bac-edge-single .bac-edge-progress-fill') || edgeBarEl.querySelector('.bac-edge-fill-lights');
+              if (fill) fill.style.width = lightsPercent + '%';
+              showTip(`💡 ${isRo ? 'Lumini' : 'Lights'}: ${lightsPercent}%`);
+            } else {
+              mediaPercent = Math.max(0, Math.min(100, pct));
+              const fill = edgeBarEl.querySelector('.bac-dual-active-media .bac-track-slot-media .bac-edge-progress-fill, .bac-edge-single .bac-edge-progress-fill') || edgeBarEl.querySelector('.bac-edge-fill-media');
+              if (fill) fill.style.width = mediaPercent + '%';
+              showTip(`🎵 ${isRo ? 'Volum' : 'Volume'}: ${mediaPercent}%`);
+            }
+
+            // 2. Call Home Assistant service ONLY when drag is finished (on release / pointerup)
+            if (isFinal) {
+              if (hassObj && typeof hassObj.callService === 'function') {
+                if (isLightsActive) {
+                  // Prefer active single lights to avoid inadvertently turning on other group members
+                  const activeSingles = onLightDetails.filter(l => !l.isGroup);
+                  const targetLights = activeSingles.length > 0 
+                    ? activeSingles.map(l => l.id) 
+                    : (onLightDetails.length > 0 
+                        ? onLightDetails.map(l => l.id) 
+                        : (singleEntities.length > 0 
+                            ? singleEntities.map(l => l.id) 
+                            : (lightEntities.length > 0 ? lightEntities.map(l => l.id) : (cardConfig.entity ? [cardConfig.entity] : []))));
+                  if (targetLights.length > 0) {
+                    const finalBrightness = Math.max(1, Math.min(100, pct));
+                    hassObj.callService('light', 'turn_on', { entity_id: targetLights, brightness_pct: finalBrightness });
+                  }
+                } else {
+                  // Safely target actively playing / active media player; never call volume_set on a device that is off or standby
+                  const targetMedia = playingMediaEntities[0] 
+                    || activeMediaEntities[0] 
+                    || mediaEntities.find(m => {
+                        const st = hassObj.states[m]?.state;
+                        return st && !['off', 'standby', 'unavailable', 'unknown'].includes(st);
+                      }) 
+                    || null;
+                  if (targetMedia) {
+                    hassObj.callService('media_player', 'volume_set', { entity_id: targetMedia, volume_level: pct / 100 });
+                  } else {
+                    showTip(`⚠️ ${isRo ? 'Dispozitivul media este oprit' : 'Media device is off'}`);
+                  }
+                }
+              }
+            }
+          };
+
+          let startX = 0;
+          let startPct = 0;
+          let isSliding = false;
+          let currentTargetPct = 0;
+
+          edgeBarEl.onpointerdown = (e) => {
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
+            startX = e.clientX;
+            isSliding = false;
+            bac._isSliding = false;
+            edgeBarEl.classList.add('bac-edge-active');
+
+            const isLightsActive = isDual ? (bac.activeBarSlot === 'lights') : (finalBarType === 'lights');
+            startPct = isLightsActive ? Math.max(1, lightsPercent) : mediaPercent;
+            currentTargetPct = startPct;
+
+            if (typeof edgeBarEl.setPointerCapture === 'function' && e.pointerId) {
+              try { edgeBarEl.setPointerCapture(e.pointerId); } catch(err) {}
+            }
+
+            // Window-level safety fallback listener to guarantee release is caught even if capture drops
+            const windowEndDrag = (ev) => {
+              window.removeEventListener('pointerup', windowEndDrag);
+              window.removeEventListener('pointercancel', windowEndDrag);
+              finishDrag(ev);
+            };
+            window.addEventListener('pointerup', windowEndDrag, { once: true });
+            window.addEventListener('pointercancel', windowEndDrag, { once: true });
+          };
+
+          edgeBarEl.onpointermove = (e) => {
+            if (startX === 0 && !isSliding) return;
+            const deltaX = e.clientX - startX;
+
+            if (!isSliding && Math.abs(deltaX) > 5) {
+              isSliding = true;
+              bac._isSliding = true;
+              edgeBarEl.classList.add('bac-edge-dragging');
+            }
+
+            // Safety timer: auto-release slider lock if inactive for 1200ms
+            if (bac._slideSafetyTimer) clearTimeout(bac._slideSafetyTimer);
+            bac._slideSafetyTimer = setTimeout(() => {
+              bac._isSliding = false;
+              if (edgeBarEl) {
+                edgeBarEl.classList.remove('bac-edge-active');
+                edgeBarEl.classList.remove('bac-edge-dragging');
+              }
+              if (bac._pendingRender && cardObj && typeof cardObj.requestUpdate === 'function') {
+                bac._pendingRender = false;
+                cardObj.requestUpdate();
+              }
+            }, 1200);
+
+            if (isSliding) {
+              if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+              if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
+              const rect = edgeBarEl.getBoundingClientRect();
+              const trackWidth = (rect.width * 0.68) || 120;
+              const pctDelta = (deltaX / trackWidth) * 100;
+              const isLights = isDual ? (bac.activeBarSlot === 'lights') : (finalBarType === 'lights');
+              const minVal = isLights ? 1 : 0;
+              currentTargetPct = Math.max(minVal, Math.min(100, Math.round(startPct + pctDelta)));
+              updateValue(currentTargetPct, false);
+            }
+          };
+
+          const finishDrag = (e) => {
+            if (bac._slideSafetyTimer) {
+              clearTimeout(bac._slideSafetyTimer);
+              bac._slideSafetyTimer = null;
+            }
+            if (typeof edgeBarEl.releasePointerCapture === 'function' && e && e.pointerId) {
+              try { edgeBarEl.releasePointerCapture(e.pointerId); } catch(err) {}
+            }
+
+            edgeBarEl.classList.remove('bac-edge-active');
+
+            if (isSliding) {
+              isSliding = false;
+              bac._isSliding = false;
+              edgeBarEl.classList.remove('bac-edge-dragging');
+              if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+              if (e && typeof e.preventDefault === 'function') e.preventDefault();
+              updateValue(currentTargetPct, true);
+
+              // Seamless sync: request update after short delay so HA state change is fully picked up
+              setTimeout(() => {
+                bac._isSliding = false;
+                if (cardObj && typeof cardObj.requestUpdate === 'function') {
+                  cardObj.requestUpdate();
+                }
+              }, 250);
+            } else if (startX !== 0) {
+              // It was a single TAP (no horizontal slide) -> Instant toggle between sliders!
+              bac._isSliding = false;
+              if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+              if (isDual) {
+                triggerSwap(e);
+              } else {
+                const isLightsActive = (finalBarType === 'lights');
+                showTip(isLightsActive ? `💡 ${isRo ? 'Lumini' : 'Lights'}: ${lightsPercent}%` : `🎵 ${isRo ? 'Volum' : 'Volume'}: ${mediaPercent}%`);
+              }
+            }
+            startX = 0;
+          };
+
+          edgeBarEl.onpointerup = finishDrag;
+          edgeBarEl.onpointercancel = finishDrag;
+          edgeBarEl.onclick = (e) => {
+            if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+          };
+
+          // Light capsule click to switch slider slot (between Lights and Media) or toggle room lights
+          const lightChipEl = areaCardEl.querySelector('.bac-card-light-chip');
+          if (lightChipEl) {
+            lightChipEl.style.cursor = 'pointer';
+            lightChipEl.onclick = (e) => {
+              if (e) {
+                if (typeof e.stopPropagation === 'function') e.stopPropagation();
+                if (typeof e.preventDefault === 'function') e.preventDefault();
+              }
+              if (isDual) {
+                triggerSwap(e);
+              } else if (onLightDetails.length > 0 || lightEntities.length > 0) {
+                if (hassObj && typeof hassObj.callService === 'function') {
+                  const targetLights = onLightDetails.length > 0 
+                    ? onLightDetails.map(l => l.id) 
+                    : (lightEntities.length > 0 ? lightEntities.map(l => l.id) : (cardConfig.entity ? [cardConfig.entity] : []));
+                  if (targetLights.length > 0) {
+                    hassObj.callService('light', 'toggle', { entity_id: targetLights });
+                  }
+                }
+              }
+            };
+          }
+        } else {
+          // If edge bar is disabled, tapping the light chip still toggles room lights
+          const lightChipEl = areaCardEl.querySelector('.bac-card-light-chip');
+          if (lightChipEl) {
+            lightChipEl.style.cursor = 'pointer';
+            lightChipEl.onclick = (e) => {
+              if (e) {
+                if (typeof e.stopPropagation === 'function') e.stopPropagation();
+                if (typeof e.preventDefault === 'function') e.preventDefault();
+              }
+              if (hassObj && typeof hassObj.callService === 'function') {
+                const targetLights = onLightDetails.length > 0 
+                  ? onLightDetails.map(l => l.id) 
+                  : (lightEntities.length > 0 ? lightEntities.map(l => l.id) : (cardConfig.entity ? [cardConfig.entity] : []));
+                if (targetLights.length > 0) {
+                  hassObj.callService('light', 'toggle', { entity_id: targetLights });
+                }
+              }
+            };
+          }
+        }
+
+        // 4.10. Auto-scroll Subtitle Marquee on Overflow (Apple-style ping-pong)
+        const subEl = areaCardEl.querySelector('.bac-area-subtitle');
+        const contentEl = subEl ? subEl.querySelector('.bac-subtitle-content') : null;
+        if (subEl && contentEl && autoScrollSubtitle) {
+          const updateMarquee = () => {
+            if (!subEl || !contentEl) return;
+            const overflowPx = Math.ceil(contentEl.scrollWidth - subEl.clientWidth);
+            if (overflowPx > 3) {
+              subEl.classList.add('bac-marquee-overflow');
+              contentEl.style.setProperty('--bac-marquee-distance', `-${overflowPx + 6}px`);
+              const animDuration = Math.min(14, Math.max(6, Math.round(overflowPx / 20) + 4));
+              contentEl.style.setProperty('--bac-marquee-duration', `${animDuration}s`);
+            } else {
+              subEl.classList.remove('bac-marquee-overflow');
+              contentEl.style.removeProperty('--bac-marquee-distance');
+              contentEl.style.removeProperty('--bac-marquee-duration');
+            }
+          };
+
+          if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(() => {
+              updateMarquee();
+              setTimeout(updateMarquee, 120);
+            });
+          } else {
+            setTimeout(updateMarquee, 60);
+          }
+
+          if (typeof ResizeObserver !== 'undefined' && !container._bacSubRO) {
+            container._bacSubRO = new ResizeObserver(() => {
+              updateMarquee();
+            });
+            container._bacSubRO.observe(subEl);
+          }
+        }
+
+        // 5. CSS Styles
+        return `
+          /* Hide Bubble Card default elements, our area card handles the full layout */
+          .bubble-icon-container,
+          .bubble-name-container,
+          .bubble-state,
+          .bubble-sub-button-container,
+          .bubble-content-container,
+          .bubble-line {
+            display: none !important;
+          }
+
+          :host {
+            height: 100% !important;
+          }
+
+          ha-card {
+            height: 100% !important;
+            border-radius: ${borderRadius} !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            overflow: visible !important;
+          }
+
+          /* Main Card Container - dynamically scales to match Home Assistant Layout grid rows */
+          .bubble-button-card-container {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            position: relative !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
+            ${cardContainerHeightCss}
+            border-radius: ${borderRadius} !important;
+            overflow: visible !important;
+            cursor: pointer !important;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            ${backdropFilterCss}
+            ${cardBorderCss}
+            ${cardShadowCss}
+          }
+
+          .bubble-button-background {
+            border-radius: ${borderRadius} !important;
+            overflow: hidden !important;
+            ${cardBgCss}
+          }
+
+          .bubble-button-card-container:hover {
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            ${cardShadowStyle === 'none' ? `
+              box-shadow: none !important;
+            ` : (cardShadowStyle === 'subtle' ? `
+              box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+            ` : `
+              box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.45) !important;
+            `)}
+          }
+
+          .bubble-button-card-container:active {
+            transform: scale(0.975) !important;
+            border-color: rgba(255, 255, 255, 0.32) !important;
+            ${cardShadowStyle === 'none' ? `
+              box-shadow: none !important;
+            ` : `
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+            `}
+          }
+
+
+          /* Area Card Element Wrapper */
+          .bac-area-card {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 100% !important;
+            flex: 1 1 100% !important;
+            position: relative !important;
+            box-sizing: border-box !important;
+            padding: 0 !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+            z-index: 2 !important;
+            pointer-events: none !important;
+          }
+
+          /* Optional Background Picture with Adaptive Brightness Overlay */
+          .bac-bg-picture {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background-size: cover !important;
+            background-position: center !important;
+            border-radius: ${borderRadius} !important;
+            opacity: ${bgOpacity} !important;
+            filter: ${bgFilter} !important;
+            transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), filter 0.75s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+          }
+
+          /* Ambient Soft Mesh Breathing Glow (Organic Depth) */
+          .bac-mesh-glow {
+            position: absolute !important;
+            inset: 0 !important;
+            border-radius: ${borderRadius} !important;
+            pointer-events: none !important;
+            overflow: hidden !important;
+            z-index: 1 !important;
+            filter: blur(28px) !important;
+            -webkit-filter: blur(28px) !important;
+            opacity: 0.85 !important;
+            animation: bac-mesh-breathe 8s ease-in-out infinite alternate !important;
+          }
+
+          .bac-mesh-amber {
+            background: 
+              radial-gradient(circle at 18% 22%, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.08) 50%, transparent 75%),
+              radial-gradient(circle at 82% 78%, rgba(251, 191, 36, 0.14) 0%, rgba(180, 83, 9, 0.05) 55%, transparent 75%) !important;
+          }
+
+          .bac-mesh-cyan {
+            background: 
+              radial-gradient(circle at 18% 22%, rgba(56, 189, 248, 0.22) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 75%),
+              radial-gradient(circle at 82% 78%, rgba(99, 102, 241, 0.16) 0%, rgba(79, 70, 229, 0.05) 55%, transparent 75%) !important;
+          }
+
+          .bac-mesh-crimson {
+            background: 
+              radial-gradient(circle at 18% 22%, rgba(239, 68, 68, 0.24) 0%, rgba(185, 28, 28, 0.09) 50%, transparent 75%),
+              radial-gradient(circle at 82% 78%, rgba(220, 38, 38, 0.15) 0%, transparent 75%) !important;
+          }
+
+          .bac-mesh-dynamic {
+            background: 
+              radial-gradient(circle at 18% 22%, rgba(${glowRgb}, 0.22) 0%, rgba(${glowRgb}, 0.07) 50%, transparent 75%),
+              radial-gradient(circle at 82% 78%, rgba(${glowRgb}, 0.14) 0%, transparent 75%) !important;
+          }
+
+          /* Content Layout */
+          .bac-content-wrapper {
+            display: flex !important;
+            ${layout === 'horizontal' ? `
+              flex-direction: row !important;
+              align-items: center !important;
+              justify-content: flex-start !important;
+              text-align: left !important;
+              padding: 8px 16px !important;
+              gap: 14px !important;
+            ` : `
+              flex-direction: column !important;
+              align-items: center !important;
+              justify-content: center !important;
+              text-align: center !important;
+              padding: 8px 6px !important;
+              gap: 2px !important;
+            `}
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 100% !important;
+            flex: 1 1 100% !important;
+            box-sizing: border-box !important;
+            position: relative !important;
+            z-index: 5 !important;
+          }
+
+          .bac-icon-badge-row {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            position: relative !important;
+            margin-top: 4px !important;
+          }
+
+          /* Central Room Icon Container (v1 Proportions) */
+          .bac-main-icon-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            position: relative !important;
+            width: 44px !important;
+            height: 44px !important;
+            border-radius: 50% !important;
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+            transition: all 0.3s ease !important;
+          }
+
+          .bac-main-icon-container.bac-icon-has-alert {
+            border-radius: 50% !important;
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+          }
+
+          .bac-icon-frosted-circle {
+            position: absolute !important;
+            inset: 0 !important;
+            border-radius: 50% !important;
+            background: rgba(255, 255, 255, 0.07) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+            z-index: 2 !important;
+            pointer-events: none !important;
+            transition: all 0.4s ease !important;
+          }
+
+          /* Clean Satin Translucent Glass in Idle/Sleep (clean, no rings/shadows) */
+          .bac-circle-smoked {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.09) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+          }
+
+          /* 3D Tactile Delimiter Ring & Depth Shadow (When Enabled in Menu, Active States Only) */
+          .bac-circle-depth {
+            border-color: rgba(255, 255, 255, 0.16) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), 0 0 0 2px rgba(25, 20, 18, 0.95), 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+          }
+
+          .bac-circle-smoked + ha-icon,
+          .bac-circle-smoked ~ ha-icon {
+            color: rgba(255, 255, 255, 0.90) !important;
+            filter: none !important;
+          }
+
+          .bac-main-icon-container > ha-icon {
+            --mdc-icon-size: 24px !important;
+            width: 24px !important;
+            height: 24px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative !important;
+            z-index: 3 !important;
+            color: #ffffff !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+            filter: none !important;
+            transform: none !important;
+            transform-origin: center center !important;
+            transition: color 0.3s ease, filter 0.3s ease !important;
+          }
+
+
+
+          /* Radiant Backlight Halos (Theme-specific) - Perfectly Centered (-7px offset for 58px in 44px container) */
+          .bac-icon-halo {
+            position: absolute !important;
+            top: -7px !important;
+            left: -7px !important;
+            width: 58px !important;
+            height: 58px !important;
+            border-radius: 50% !important;
+            filter: blur(10px) !important;
+            z-index: 1 !important;
+            pointer-events: none !important;
+            animation: bac-halo-breathe 4s ease-in-out infinite alternate !important;
+          }
+
+          .bac-halo-amber {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.65) 0%, rgba(217, 119, 6, 0.25) 50%, transparent 72%) !important;
+          }
+
+          .bac-halo-cyan {
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.70) 0%, rgba(14, 165, 233, 0.25) 50%, transparent 72%) !important;
+          }
+
+          .bac-halo-red {
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.80) 0%, rgba(220, 38, 38, 0.30) 50%, transparent 72%) !important;
+          }
+
+          .bac-halo-teal {
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.65) 0%, rgba(147, 51, 234, 0.25) 50%, transparent 72%) !important;
+          }
+
+          /* Background Animated Circle (Radar Pulse) */
+          .bac-concentric-rings {
+            position: absolute !important;
+            inset: 0 !important;
+            border-radius: 50% !important;
+            pointer-events: none !important;
+            z-index: 1 !important;
+          }
+
+          .bac-ring {
+            position: absolute !important;
+            inset: 0 !important;
+            border-radius: 50% !important;
+            pointer-events: none !important;
+          }
+
+          .bac-radar-active .bac-ring {
+            animation: bac-presence-radar-pulse 2s 0.4s infinite ease-out !important;
+          }
+
+          /* Top-Left Frameless Climate Indicator (Luminous Icon + Target Temp) */
+          .bac-card-climate-chip {
+            position: absolute !important;
+            top: 8px !important;
+            left: 9px !important;
+            right: auto !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 3px !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            z-index: 10 !important;
+          }
+
+          .bac-card-climate-chip ha-icon {
+            --mdc-icon-size: 11px !important;
+            width: 11px !important;
+            height: 11px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+
+          .bac-card-climate-chip .bac-climate-temp {
+            font-size: 10.5px !important;
+            font-weight: 600 !important;
+            line-height: 1 !important;
+            letter-spacing: -0.1px !important;
+          }
+
+          .bac-climate-heating ha-icon {
+            color: #fb923c !important;
+            filter: drop-shadow(0 0 5px rgba(251, 146, 60, 0.70)) !important;
+          }
+          .bac-climate-heating .bac-climate-temp {
+            color: rgba(255, 237, 213, 0.95) !important;
+            text-shadow: 0 0 6px rgba(251, 146, 60, 0.40) !important;
+          }
+
+          .bac-climate-cooling ha-icon {
+            color: #38bdf8 !important;
+            filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.70)) !important;
+          }
+          .bac-climate-cooling .bac-climate-temp {
+            color: rgba(224, 242, 254, 0.95) !important;
+            text-shadow: 0 0 6px rgba(56, 189, 248, 0.40) !important;
+          }
+
+          /* Climate chip in Horizontal mode - perfectly aligned with light chip in top right */
+          .bac-card-layout-horizontal .bac-card-climate-chip {
+            top: 8px !important;
+            right: 48px !important;
+            left: auto !important;
+            height: auto !important;
+            min-height: 0 !important;
+            padding: 1.5px 4px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
+            line-height: 1 !important;
+          }
+
+          .bac-card-layout-horizontal:not(:has(.bac-card-light-chip)) .bac-card-climate-chip {
+            right: 14px !important;
+          }
+
+          /* Top-Right Frosted Glass Capsule with Luminous Dots */
+          .bac-card-light-chip {
+            position: absolute !important;
+            top: 8px !important;
+            right: 8px !important;
+            left: auto !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 4px !important;
+            padding: 2px 6px !important;
+            border-radius: 12px !important;
+            background: rgba(255, 195, 30, 0.16) !important;
+            backdrop-filter: blur(4px) !important;
+            -webkit-backdrop-filter: blur(4px) !important;
+            border: 1px solid rgba(255, 204, 0, 0.35) !important;
+            box-shadow: none !important;
+            z-index: 10 !important;
+            cursor: pointer !important;
+            pointer-events: auto !important;
+            transition: transform 0.18s ease, border-color 0.2s ease, background 0.2s ease !important;
+          }
+
+          .bac-card-light-chip:active {
+            transform: scale(0.90) !important;
+          }
+
+          .bac-card-layout-horizontal .bac-card-light-chip {
+            top: 10px !important;
+            right: 14px !important;
+            left: auto !important;
+            height: auto !important;
+            min-height: 0 !important;
+            padding: 2px 6px !important;
+            border-radius: 12px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
+          }
+
+          /* Expanded invisible click & tap target area (large touch zone, ultra-thin visual chip) */
+          .bac-card-light-chip::before {
+            content: '' !important;
+            position: absolute !important;
+            top: -8px !important;
+            bottom: -8px !important;
+            left: -10px !important;
+            right: -10px !important;
+            cursor: pointer !important;
+            z-index: 1 !important;
+          }
+
+          .bac-card-light-chip.bac-chip-above-icon {
+            top: 4px !important;
+            left: 50% !important;
+            right: auto !important;
+            transform: translateX(-50%) !important;
+          }
+
+          ${glowStyle === 'icon_glow' ? `
+            .bac-main-icon-container > ha-icon {
+              filter: drop-shadow(0 0 10px rgba(${glowRgb}, 0.85)) !important;
+              color: rgb(${glowRgb}) !important;
+            }
+          ` : ''}
+
+          .bac-light-dot {
+            width: 5px !important;
+            height: 5px !important;
+            border-radius: 50% !important;
+            background: #ffb703 !important;
+            box-shadow: 0 0 6px #ffb703 !important;
+            display: inline-block !important;
+          }
+
+          .bac-light-count {
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            color: #ffb703 !important;
+            line-height: 1 !important;
+          }
+
+          /* Dynamic Main Icon Alert Transitions & Sizing (v3) */
+          /* Alert icons sizing and transitions (v3) */
+          .bac-main-icon-container.bac-icon-has-alert > ha-icon {
+            --mdc-icon-size: 24px !important;
+            width: 24px !important;
+            height: 24px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            transform: none !important;
+            transform-origin: center center !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+            transition: color 0.3s ease, filter 0.3s ease !important;
+          }
+
+          /* Smoke / Fire Alert on Main Icon */
+          .bac-main-icon-container.bac-alert-smoke > ha-icon {
+            color: #ef4444 !important;
+            filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.75)) !important;
+            animation: bac-critical-pulse 1.5s ease-in-out infinite !important;
+          }
+
+          /* Water Leak Alert on Main Icon */
+          .bac-main-icon-container.bac-alert-moisture > ha-icon {
+            color: #38bdf8 !important;
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.75)) !important;
+            animation: bac-critical-pulse 1.8s ease-in-out infinite !important;
+          }
+
+          /* Motion / Occupancy Alert on Main Icon (Compact 20px) */
+          .bac-main-icon-container.bac-alert-motion > ha-icon {
+            --mdc-icon-size: 20px !important;
+            width: 20px !important;
+            height: 20px !important;
+            color: #fbbf24 !important;
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.65)) !important;
+          }
+
+          /* Air Quality / CO2 Alert on Main Icon (Compact 20px) */
+          .bac-main-icon-container.bac-alert-air_quality > ha-icon {
+            --mdc-icon-size: 20px !important;
+            width: 20px !important;
+            height: 20px !important;
+            color: #c084fc !important;
+            filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.65)) !important;
+          }
+
+          /* Open Door / Window Alert on Main Icon (Compact 20px) */
+          .bac-main-icon-container.bac-alert-door > ha-icon,
+          .bac-main-icon-container.bac-alert-window > ha-icon {
+            --mdc-icon-size: 20px !important;
+            width: 20px !important;
+            height: 20px !important;
+            color: #fbbf24 !important;
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.65)) !important;
+          }
+
+          /* Low Battery Alert on Main Icon (Compact 20px) */
+          .bac-main-icon-container.bac-alert-battery > ha-icon {
+            --mdc-icon-size: 20px !important;
+            width: 20px !important;
+            height: 20px !important;
+            color: #f59e0b !important;
+            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.65)) !important;
+          }
+          .bac-main-icon-container.bac-alert-battery.bac-alert-critical > ha-icon {
+            --mdc-icon-size: 20px !important;
+            width: 20px !important;
+            height: 20px !important;
+            color: #ef4444 !important;
+            filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.75)) !important;
+            animation: bac-critical-pulse 1.8s ease-in-out infinite !important;
+          }
+
+          /* Subtitle Alert Pills */
+          .bac-alert-badge.bac-alert-smoke {
+            background: #dc2626 !important;
+            border-color: #f87171 !important;
+            box-shadow: 0 0 5px rgba(239, 68, 68, 0.55) !important;
+            animation: bac-critical-pulse 1.5s ease-in-out infinite !important;
+          }
+          .bac-alert-badge.bac-alert-smoke ha-icon { color: #ffffff !important; }
+
+          /* Water Leak Alert */
+          .bac-alert-badge.bac-alert-moisture {
+            background: #0284c7 !important;
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 5px rgba(56, 189, 248, 0.55) !important;
+            animation: bac-critical-pulse 1.8s ease-in-out infinite !important;
+          }
+          .bac-alert-badge.bac-alert-moisture ha-icon { color: #ffffff !important; }
+
+          /* Motion / Occupancy Alert */
+          .bac-alert-badge.bac-alert-motion {
+            background: #d97706 !important;
+            border-color: #fbbf24 !important;
+            box-shadow: 0 0 5px rgba(245, 158, 11, 0.50) !important;
+          }
+          .bac-alert-badge.bac-alert-motion ha-icon { color: #ffffff !important; }
+
+          /* Air Quality / CO2 Alert */
+          .bac-alert-badge.bac-alert-air_quality {
+            background: #7c3aed !important;
+            border-color: #c084fc !important;
+            box-shadow: 0 0 5px rgba(168, 85, 247, 0.50) !important;
+          }
+          .bac-alert-badge.bac-alert-air_quality ha-icon { color: #ffffff !important; }
+
+          /* Open Door / Window Alert */
+          .bac-alert-badge.bac-alert-door,
+          .bac-alert-badge.bac-alert-window {
+            background: #b45309 !important;
+            border-color: #fbbf24 !important;
+            box-shadow: 0 0 5px rgba(251, 191, 36, 0.45) !important;
+          }
+          .bac-alert-badge.bac-alert-door ha-icon,
+          .bac-alert-badge.bac-alert-window ha-icon { color: #ffffff !important; }
+
+          /* Low Battery Alert (Amber warning or Crimson critical) */
+          .bac-alert-badge.bac-alert-battery.bac-alert-warning,
+          .bac-alert-badge.bac-alert-battery {
+            background: #d97706 !important;
+            border-color: #fbbf24 !important;
+            box-shadow: 0 0 5px rgba(245, 158, 11, 0.50) !important;
+          }
+          .bac-alert-badge.bac-alert-battery.bac-alert-critical {
+            background: #dc2626 !important;
+            border-color: #f87171 !important;
+            box-shadow: 0 0 5px rgba(239, 68, 68, 0.55) !important;
+            animation: bac-critical-pulse 1.8s ease-in-out infinite !important;
+          }
+          .bac-alert-badge.bac-alert-battery ha-icon { color: #ffffff !important; }
+
+          /* Typography (v1 Balanced Proportions) */
+          .bac-text-container {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            margin-top: 4px !important;
+            margin-bottom: 8px !important;
+            gap: 1px !important;
+            width: 100% !important;
+          }
+
+          .bac-area-title {
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            color: #ffffff !important;
+            line-height: 1.25 !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            max-width: 95% !important;
+            margin: 0 !important;
+          }
+
+          .bac-area-subtitle {
+            font-size: 11px !important;
+            font-weight: 400 !important;
+            color: rgba(255, 255, 255, 0.70) !important;
+            line-height: 1.25 !important;
+            width: 100% !important;
+            max-width: 90% !important;
+            margin: 0 auto !important;
+            padding: 0 4px !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+            position: relative !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+          }
+
+          .bac-subtitle-content {
+            display: inline-flex !important;
+            align-items: center !important;
+            white-space: nowrap !important;
+            gap: 2px !important;
+            vertical-align: middle !important;
+          }
+
+          /* Apple-Style Ping-Pong Marquee on Overflow */
+          .bac-area-subtitle.bac-marquee-overflow {
+            text-align: left !important;
+            mask-image: linear-gradient(90deg, black 0%, black calc(100% - 14px), transparent 100%) !important;
+            -webkit-mask-image: linear-gradient(90deg, black 0%, black calc(100% - 14px), transparent 100%) !important;
+          }
+
+          .bac-area-subtitle.bac-marquee-overflow .bac-subtitle-content {
+            display: inline-flex !important;
+            animation: bac-apple-marquee var(--bac-marquee-duration, 8s) cubic-bezier(0.42, 0, 0.58, 1) infinite !important;
+            will-change: transform !important;
+          }
+
+          .bac-area-subtitle:hover .bac-subtitle-content {
+            animation-play-state: paused !important;
+          }
+
+          @keyframes bac-apple-marquee {
+            0%, 22% {
+              transform: translateX(0);
+            }
+            48%, 72% {
+              transform: translateX(var(--bac-marquee-distance, -30px));
+            }
+            95%, 100% {
+              transform: translateX(0);
+            }
+          }
+
+          /* Bubble Button Style (Horizontal Pill / Capsule) */
+          .bac-card-layout-horizontal {
+            border-radius: var(--bubble-border-radius, 100px) !important;
+          }
+
+          .bac-layout-horizontal {
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            text-align: left !important;
+            padding: 4px 14px 4px 6px !important;
+            gap: 10px !important;
+          }
+
+          .bac-layout-horizontal .bac-icon-badge-row {
+            margin: 0 !important;
+          }
+
+          .bac-layout-horizontal .bac-main-icon-container {
+            width: 42px !important;
+            height: 42px !important;
+            border-radius: 50% !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+          }
+
+          .bac-layout-horizontal .bac-text-container {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            text-align: left !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            flex: 1 1 auto !important;
+            gap: 1px !important;
+          }
+
+          .bac-layout-horizontal .bac-area-title {
+            font-size: 13.5px !important;
+            font-weight: 600 !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+            text-align: left !important;
+          }
+
+          .bac-layout-horizontal .bac-area-subtitle {
+            font-size: 11px !important;
+            font-weight: 400 !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            opacity: 0.65 !important;
+            text-align: left !important;
+          }
+
+          /* Edge progress bar in Horizontal layout */
+          .bac-card-layout-horizontal .bac-edge-progress-container {
+            bottom: 0 !important;
+            height: 14px !important;
+            border-radius: 0 0 100px 100px !important;
+          }
+
+          .bac-card-layout-horizontal .bac-edge-progress-container .bac-edge-track-wrapper {
+            left: 56px !important;
+            right: 20px !important;
+            bottom: 2px !important;
+          }
+
+          .bac-card-layout-horizontal .bac-edge-progress-track {
+            height: 3px !important;
+          }
+
+          .bac-card-layout-horizontal .bac-edge-progress-container:hover .bac-edge-progress-track,
+          .bac-card-layout-horizontal .bac-edge-progress-container.bac-edge-active .bac-edge-progress-track,
+          .bac-card-layout-horizontal .bac-edge-progress-container.bac-edge-dragging .bac-edge-progress-track {
+            height: 5px !important;
+          }
+
+          /* In dual mode in Horizontal layout, hide the inactive track so there is NO overlap or second bar */
+          .bac-card-layout-horizontal .bac-edge-dual.bac-dual-active-media .bac-track-slot-lights,
+          .bac-card-layout-horizontal .bac-edge-dual.bac-dual-active-lights .bac-track-slot-media {
+            display: none !important;
+          }
+
+          .bac-card-layout-horizontal .bac-edge-dual.bac-dual-active-media .bac-track-slot-media,
+          .bac-card-layout-horizontal .bac-edge-dual.bac-dual-active-lights .bac-track-slot-lights {
+            bottom: 2px !important;
+            left: 56px !important;
+            right: 20px !important;
+            opacity: 1 !important;
+            z-index: 3 !important;
+          }
+
+          .bac-card-layout-horizontal .bac-edge-dual.bac-dual-active-media .bac-track-slot-media .bac-edge-progress-track,
+          .bac-card-layout-horizontal .bac-edge-dual.bac-dual-active-lights .bac-track-slot-lights .bac-edge-progress-track {
+            height: 3px !important;
+          }
+
+          .bac-card-layout-horizontal .bac-edge-dual:hover .bac-edge-progress-track,
+          .bac-card-layout-horizontal .bac-edge-dual.bac-edge-active .bac-edge-progress-track,
+          .bac-card-layout-horizontal .bac-edge-dual.bac-edge-dragging .bac-edge-progress-track {
+            height: 5px !important;
+          }
+
+          /* 4-Corner Acoustic Waves for Horizontal (Deep radius sweep from all 4 corners) */
+          .bac-card-layout-horizontal .bac-corner-unit {
+            overflow: visible !important;
+            pointer-events: none !important;
+          }
+
+          .bac-card-layout-horizontal .bac-corner-unit .bac-wave {
+            width: 170px !important;
+            height: 170px !important;
+          }
+
+          .bac-card-layout-horizontal .bac-corner-tl .bac-wave {
+            top: -85px !important;
+            left: -85px !important;
+          }
+
+          .bac-card-layout-horizontal .bac-corner-tr .bac-wave {
+            top: -85px !important;
+            right: -85px !important;
+          }
+
+          .bac-card-layout-horizontal .bac-corner-bl .bac-wave {
+            bottom: -85px !important;
+            left: -85px !important;
+          }
+
+          .bac-card-layout-horizontal .bac-corner-br .bac-wave {
+            bottom: -85px !important;
+            right: -85px !important;
+          }
+
+          /* Radar Pulse & Halo scaled to stay completely inside 54px pill card without edge cut-off */
+          .bac-card-layout-horizontal .bac-icon-halo {
+            top: -4px !important;
+            left: -4px !important;
+            width: 50px !important;
+            height: 50px !important;
+            filter: blur(6px) !important;
+          }
+
+          .bac-card-layout-horizontal,
+          .bac-card-layout-horizontal .bac-content-wrapper,
+          .bac-card-layout-horizontal .bac-icon-badge-row,
+          .bac-card-layout-horizontal .bac-main-icon-container,
+          .bac-card-layout-horizontal .bac-concentric-rings {
+            overflow: visible !important;
+          }
+
+          /* Minimalist Layout (Single Row 56px - Icon & Name Only) */
+          .bac-layout-minimal {
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            padding: 6px 12px !important;
+          }
+
+          .bac-layout-minimal .bac-icon-badge-row {
+            margin: 0 !important;
+          }
+
+          .bac-layout-minimal .bac-text-container {
+            align-items: flex-start !important;
+            text-align: left !important;
+            margin: 0 !important;
+          }
+
+          .bac-layout-minimal .bac-area-title {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            margin: 0 !important;
+            text-align: left !important;
+          }
+
+          .bac-card-layout-minimal .bac-area-subtitle,
+          .bac-card-layout-minimal .bac-edge-progress-container,
+          .bac-card-layout-minimal .bac-card-climate-chip {
+            display: none !important;
+          }
+
+          .bac-sub-smoke {
+            color: #f87171 !important;
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.45) !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+          }
+
+          .bac-sub-moisture {
+            color: #38bdf8 !important;
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.45) !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+          }
+
+          .bac-sub-motion {
+            color: #fbbf24 !important;
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.45) !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+          }
+
+          .bac-sub-air_quality {
+            color: #c084fc !important;
+            text-shadow: 0 0 8px rgba(192, 132, 252, 0.45) !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+          }
+
+          .bac-sub-door,
+          .bac-sub-window {
+            color: #fcd34d !important;
+            text-shadow: 0 0 8px rgba(252, 211, 77, 0.40) !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+          }
+
+          .bac-sub-battery {
+            color: #fbbf24 !important;
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.40) !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+          }
+          .bac-sub-battery.bac-sub-critical {
+            color: #f87171 !important;
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.45) !important;
+          }
+
+          .bac-sub-sep {
+            margin: 0 3px !important;
+            opacity: 0.5 !important;
+          }
+
+          /* Floating Bottom Progress Bar / Interactive Slider Zone */
+          .bac-edge-progress-container {
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 26px !important;
+            background: transparent !important;
+            border-radius: 0 0 ${borderRadius} ${borderRadius} !important;
+            z-index: 10 !important;
+            pointer-events: auto !important;
+            cursor: ew-resize !important;
+            touch-action: none !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+          }
+
+          .bac-edge-dragging .bac-edge-progress-fill {
+            transition: none !important;
+          }
+
+          .bac-edge-track-wrapper {
+            position: absolute !important;
+            left: 16% !important;
+            right: 16% !important;
+            transition: all 0.44s cubic-bezier(0.34, 1.45, 0.64, 1), opacity 0.35s ease !important;
+            pointer-events: none !important;
+          }
+
+          /* Single Bar Slot */
+          .bac-track-slot-single {
+            bottom: 10px !important;
+            top: auto !important;
+            transform: none !important;
+            opacity: 1 !important;
+          }
+          .bac-track-slot-single .bac-edge-progress-track {
+            height: ${edgeBarHeight} !important;
+          }
+
+          .bac-edge-progress-track {
+            width: 100% !important;
+            background: rgba(255, 255, 255, 0.12) !important;
+            position: relative !important;
+            border-radius: 3px !important;
+            transition: height 0.44s cubic-bezier(0.34, 1.45, 0.64, 1) !important;
+          }
+
+          .bac-edge-progress-fill {
+            height: 100% !important;
+            position: relative !important;
+            border-radius: 3px !important;
+            transition: width 0.3s ease !important;
+          }
+
+          .bac-edge-type-lights .bac-edge-progress-fill,
+          .bac-edge-fill-lights {
+            background: linear-gradient(90deg, rgba(${glowRgb}, 0.35) 0%, rgb(${glowRgb}) 100%) !important;
+            box-shadow: 0 0 8px rgba(${glowRgb}, 0.60) !important;
+          }
+
+          .bac-edge-type-media .bac-edge-progress-fill,
+          .bac-edge-fill-media {
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.35) 0%, #38bdf8 100%) !important;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.60) !important;
+          }
+
+          /* Slider Handle Thumb: Hidden by default in resting state, reveals on hover or sliding */
+          .bac-edge-type-lights .bac-edge-progress-fill::after,
+          .bac-edge-fill-lights::after {
+            content: '' !important;
+            position: absolute !important;
+            right: -3px !important;
+            top: 50% !important;
+            transform: translateY(-50%) scale(0) !important;
+            opacity: 0 !important;
+            width: 6px !important;
+            height: 6px !important;
+            border-radius: 50% !important;
+            background: #ffe082 !important;
+            box-shadow: 0 0 6px rgb(${glowRgb}), 0 0 2px #ffffff !important;
+            transition: transform 0.28s cubic-bezier(0.34, 1.45, 0.64, 1), opacity 0.22s ease !important;
+            pointer-events: none !important;
+          }
+
+          .bac-edge-type-media .bac-edge-progress-fill::after,
+          .bac-edge-fill-media::after {
+            content: '' !important;
+            position: absolute !important;
+            right: -3px !important;
+            top: 50% !important;
+            transform: translateY(-50%) scale(0) !important;
+            opacity: 0 !important;
+            width: 6px !important;
+            height: 6px !important;
+            border-radius: 50% !important;
+            background: #e0f2fe !important;
+            box-shadow: 0 0 6px #38bdf8, 0 0 2px #ffffff !important;
+            transition: transform 0.28s cubic-bezier(0.34, 1.45, 0.64, 1), opacity 0.22s ease !important;
+            pointer-events: none !important;
+          }
+
+          /* Reveal handle smoothly on card hover, slider container hover, touch, or active slide */
+          .bubble-button-card-container:hover .bac-edge-progress-fill::after,
+          .bac-edge-progress-container:hover .bac-edge-progress-fill::after,
+          .bac-edge-active .bac-edge-progress-fill::after,
+          .bac-edge-dragging .bac-edge-progress-fill::after {
+            opacity: 1 !important;
+            transform: translateY(-50%) scale(1) !important;
+          }
+
+          /* Dynamic Color Temperature (Kelvin Scale) for Lighting */
+          .bac-edge-kelvin-dim .bac-edge-progress-fill,
+          .bac-edge-fill-lights.bac-edge-kelvin-dim {
+            background: linear-gradient(90deg, #9a3412 0%, #d97706 70%, #f59e0b 100%) !important;
+            box-shadow: 0 0 7px rgba(217, 119, 6, 0.50) !important;
+          }
+          .bac-edge-kelvin-dim .bac-edge-progress-fill::after,
+          .bac-edge-fill-lights.bac-edge-kelvin-dim::after {
+            background: #fed7aa !important;
+            box-shadow: 0 0 6px #d97706, 0 0 2px #ffffff !important;
+          }
+
+          .bac-edge-kelvin-warm .bac-edge-progress-fill,
+          .bac-edge-fill-lights.bac-edge-kelvin-warm {
+            background: linear-gradient(90deg, #d97706 0%, #f59e0b 60%, #fbbf24 100%) !important;
+            box-shadow: 0 0 9px rgba(245, 158, 11, 0.60) !important;
+          }
+          .bac-edge-kelvin-warm .bac-edge-progress-fill::after,
+          .bac-edge-fill-lights.bac-edge-kelvin-warm::after {
+            background: #fef08a !important;
+            box-shadow: 0 0 6px #f59e0b, 0 0 2px #ffffff !important;
+          }
+
+          .bac-edge-kelvin-bright .bac-edge-progress-fill,
+          .bac-edge-fill-lights.bac-edge-kelvin-bright {
+            background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 50%, #fef08a 100%) !important;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.75) !important;
+          }
+          .bac-edge-kelvin-bright .bac-edge-progress-fill::after,
+          .bac-edge-fill-lights.bac-edge-kelvin-bright::after {
+            background: #ffffff !important;
+            box-shadow: 0 0 7px #fbbf24, 0 0 3px #ffffff !important;
+          }
+
+          /* Media Paused State on Edge Bar */
+          .bac-edge-media-paused,
+          .bac-edge-fill-media.bac-edge-media-paused {
+            opacity: 0.70 !important;
+          }
+          .bac-edge-media-paused .bac-edge-progress-fill,
+          .bac-edge-fill-media.bac-edge-media-paused {
+            background: linear-gradient(90deg, #334155 0%, #0369a1 100%) !important;
+            box-shadow: 0 0 5px rgba(3, 105, 161, 0.35) !important;
+          }
+          .bac-edge-media-paused .bac-edge-progress-fill::after,
+          .bac-edge-fill-media.bac-edge-media-paused::after {
+            background: #94a3b8 !important;
+            box-shadow: 0 0 4px #0369a1 !important;
+            opacity: 0.65 !important;
+          }
+
+          /* Dual Edge Bar Container & Magnetic Orbit Swap Animation */
+          .bac-edge-dual {
+            /* Inherits position, bottom 0, left 0, right 0, height 28px from .bac-edge-progress-container */
+          }
+
+          .bac-edge-dual .bac-edge-progress-track {
+            background: rgba(255, 255, 255, 0.10) !important;
+          }
+
+          /* Media Primary Slot (Default when both active) */
+          .bac-dual-active-media .bac-track-slot-media {
+            bottom: 12px !important;
+            top: auto !important;
+            left: 16% !important;
+            right: 16% !important;
+            transform: none !important;
+            opacity: 1 !important;
+            z-index: 3 !important;
+          }
+          .bac-dual-active-media .bac-track-slot-media .bac-edge-progress-track {
+            height: ${edgeBarHeight} !important;
+          }
+          .bac-dual-active-media .bac-track-slot-media .bac-edge-progress-fill::after {
+            display: block !important;
+          }
+
+          /* Inactive Lights Accent at Bottom Edge (Full aesthetic line) */
+          .bac-dual-active-media .bac-track-slot-lights {
+            top: auto !important;
+            bottom: 0px !important;
+            left: 12% !important;
+            right: 12% !important;
+            transform: none !important;
+            opacity: 0.85 !important;
+            z-index: 2 !important;
+          }
+          .bac-dual-active-media .bac-track-slot-lights .bac-edge-progress-track {
+            height: 2px !important;
+            background: transparent !important;
+          }
+          .bac-dual-active-media .bac-track-slot-lights .bac-edge-progress-fill {
+            width: 100% !important;
+            border-radius: 2px !important;
+          }
+          .bac-dual-active-media .bac-track-slot-lights .bac-edge-progress-fill::after {
+            display: none !important;
+            opacity: 0 !important;
+          }
+
+          /* Lights Primary Slot (After tap swap) */
+          .bac-dual-active-lights .bac-track-slot-lights {
+            bottom: 12px !important;
+            top: auto !important;
+            left: 16% !important;
+            right: 16% !important;
+            transform: none !important;
+            opacity: 1 !important;
+            z-index: 3 !important;
+          }
+          .bac-dual-active-lights .bac-track-slot-lights .bac-edge-progress-track {
+            height: ${edgeBarHeight} !important;
+          }
+          .bac-dual-active-lights .bac-track-slot-lights .bac-edge-progress-fill::after {
+            display: block !important;
+          }
+
+          /* Inactive Media Accent at Bottom Edge (Full aesthetic line) */
+          .bac-dual-active-lights .bac-track-slot-media {
+            top: auto !important;
+            bottom: 0px !important;
+            left: 12% !important;
+            right: 12% !important;
+            transform: none !important;
+            opacity: 0.85 !important;
+            z-index: 2 !important;
+          }
+          .bac-dual-active-lights .bac-track-slot-media .bac-edge-progress-track {
+            height: 2px !important;
+            background: transparent !important;
+          }
+          .bac-dual-active-lights .bac-track-slot-media .bac-edge-progress-fill {
+            width: 100% !important;
+            border-radius: 2px !important;
+          }
+          .bac-dual-active-lights .bac-track-slot-media .bac-edge-progress-fill::after {
+            display: none !important;
+            opacity: 0 !important;
+          }
+
+          /* Swap Feedback Tooltip Pill */
+          .bac-edge-swap-tooltip {
+            position: absolute !important;
+            top: -24px !important;
+            left: 50% !important;
+            transform: translateX(-50%) translateY(4px) scale(0.85) !important;
+            background: rgba(15, 23, 42, 0.92) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            color: #f8fafc !important;
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            padding: 2px 9px !important;
+            border-radius: 12px !important;
+            white-space: nowrap !important;
+            pointer-events: none !important;
+            opacity: 0 !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            transition: opacity 0.22s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+            z-index: 12 !important;
+          }
+
+          .bac-edge-swap-tooltip.bac-tip-show {
+            opacity: 1 !important;
+            transform: translateX(-50%) translateY(0) scale(1) !important;
+          }
+
+          /* Corner Acoustic Waves (Only when media is active) */
+          .bac-media-surround-waves {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: ${borderRadius} !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+            opacity: ${waveOpacity} !important;
+            transition: opacity 0.3s ease !important;
+            z-index: 3 !important;
+          }
+
+          /* Color palette presets for filled circles & outline */
+          .bac-waves-subtle_cyan,
+          .bac-waves-soft_cyan {
+            --bac-wave-fill: rgba(56, 189, 248, 0.42);
+            --bac-wave-fill-soft: rgba(56, 189, 248, 0.14);
+            --bac-wave-color: rgba(56, 189, 248, 0.55);
+          }
+
+          .bac-waves-subtle_slate {
+            --bac-wave-fill: rgba(148, 163, 184, 0.38);
+            --bac-wave-fill-soft: rgba(148, 163, 184, 0.12);
+            --bac-wave-color: rgba(148, 163, 184, 0.50);
+          }
+
+          .bac-waves-warm_amber {
+            --bac-wave-fill: rgba(251, 191, 36, 0.40);
+            --bac-wave-fill-soft: rgba(251, 191, 36, 0.14);
+            --bac-wave-color: rgba(251, 191, 36, 0.55);
+          }
+
+          .bac-waves-synth_violet {
+            --bac-wave-fill: rgba(168, 85, 247, 0.40);
+            --bac-wave-fill-soft: rgba(168, 85, 247, 0.14);
+            --bac-wave-color: rgba(168, 85, 247, 0.55);
+          }
+
+          .bac-waves-soft_white {
+            --bac-wave-fill: rgba(255, 255, 255, 0.28);
+            --bac-wave-fill-soft: rgba(255, 255, 255, 0.08);
+            --bac-wave-color: rgba(255, 255, 255, 0.35);
+          }
+
+          .bac-corner-unit {
+            position: absolute !important;
+            width: 65px !important;
+            height: 65px !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+          }
+
+          .bac-corner-tl {
+            top: 0 !important;
+            left: 0 !important;
+            border-top-left-radius: ${borderRadius} !important;
+          }
+
+          .bac-corner-tr {
+            top: 0 !important;
+            right: 0 !important;
+            border-top-right-radius: ${borderRadius} !important;
+          }
+
+          .bac-corner-bl {
+            bottom: 0 !important;
+            left: 0 !important;
+            border-bottom-left-radius: ${borderRadius} !important;
+          }
+
+          .bac-corner-br {
+            bottom: 0 !important;
+            right: 0 !important;
+            border-bottom-right-radius: ${borderRadius} !important;
+          }
+
+          .bac-corner-unit .bac-wave {
+            position: absolute !important;
+            width: 110px !important;
+            height: 110px !important;
+            border-radius: 50% !important;
+            box-sizing: border-box !important;
+            transform-origin: center center !important;
+            pointer-events: none !important;
+            animation: bac-corner-acoustic ${waveDuration} linear infinite both !important;
+          }
+
+          /* Mode 1: Filled Overlapping Color Circles */
+          .bac-waves-filled .bac-wave {
+            border: 1px solid var(--bac-wave-color, rgba(56, 189, 248, 0.50)) !important;
+            background: radial-gradient(circle at center, var(--bac-wave-fill, rgba(56, 189, 248, 0.42)) 0%, var(--bac-wave-fill-soft, rgba(56, 189, 248, 0.14)) 65%, transparent 100%) !important;
+          }
+
+          /* Mode 2: Thin Line Outlines */
+          .bac-waves-outline .bac-wave {
+            border: 1.2px solid var(--bac-wave-color, rgba(56, 189, 248, 0.50)) !important;
+            background: transparent !important;
+            box-shadow: none !important;
+          }
+
+          .bac-corner-tl .bac-wave {
+            top: -55px !important;
+            left: -55px !important;
+          }
+
+          .bac-corner-tr .bac-wave {
+            top: -55px !important;
+            right: -55px !important;
+          }
+
+          .bac-corner-bl .bac-wave {
+            bottom: -55px !important;
+            left: -55px !important;
+          }
+
+          .bac-corner-br .bac-wave {
+            bottom: -55px !important;
+            right: -55px !important;
+          }
+
+          .bac-corner-unit .bac-wave-1 {
+            animation-delay: ${waveDelay1} !important;
+          }
+
+          .bac-corner-unit .bac-wave-2 {
+            animation-delay: ${waveDelay2} !important;
+          }
+
+          .bac-corner-unit .bac-wave-3 {
+            animation-delay: ${waveDelay3} !important;
+          }
+
+          /* Keyframe Animations */
+          @keyframes bac-corner-acoustic {
+            0% {
+              transform: scale(0.10);
+              opacity: 0;
+            }
+            20% {
+              opacity: 0.90;
+            }
+            75% {
+              opacity: 0.45;
+            }
+            100% {
+              transform: scale(1.25);
+              opacity: 0;
+            }
+          }
+
+          @keyframes bac-halo-breathe {
+            0% {
+              transform: scale(0.92);
+              opacity: 0.70;
+            }
+            100% {
+              transform: scale(1.08);
+              opacity: 1;
+            }
+          }
+
+          @keyframes bac-critical-pulse {
+            0%, 100% {
+              filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.70)) !important;
+              transform: none !important;
+            }
+            50% {
+              filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.95)) !important;
+              transform: none !important;
+            }
+          }
+
+          /* Pure Radar Pulse Animation */
+          @keyframes bac-presence-radar-pulse {
+            0% {
+              box-shadow: 0 0 0 0 var(--radar-color, #f59e0b);
+            }
+            70% {
+              box-shadow: 0 0 0 14px rgba(0, 0, 0, 0);
+            }
+            100% {
+              box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+            }
+          }
+
+          @keyframes bac-mesh-breathe {
+            0% {
+              transform: scale(0.96) translate(-2px, -2px);
+              opacity: 0.70;
+            }
+            50% {
+              transform: scale(1.05) translate(3px, 2px);
+              opacity: 0.95;
+            }
+            100% {
+              transform: scale(1.01) translate(-1px, 3px);
+              opacity: 0.75;
+            }
+          }
+        `;
+      } catch (err) {
+        console.warn('[Bubble Area Card Warning]', err);
+        return '';
+      }
+    })()}
