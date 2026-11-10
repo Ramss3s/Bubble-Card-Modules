@@ -37,6 +37,26 @@ A curated collection of advanced, custom modules designed for [Bubble Card](http
 
 ---
 
+## 🔍 How Entity Discovery & Exclusion Works
+
+> [!IMPORTANT]
+> **Strict Area Registry Assignment**:  
+> For this card to automatically discover and control your lights, climate, media player, motion sensors, and hazard alerts, your devices and entities **must be assigned to the corresponding Area** in Home Assistant (`Settings > Areas & Zones > Areas` or inside each entity's settings).
+
+### 🚫 Exclude Unwanted Entities
+If you have decorative lights, system sensors, or devices in that Area that you do **not** want the card to track, count, or control, you can exclude them easily directly from the visual GUI editor or in YAML:
+
+```yaml
+ramss3s_area_v3:
+  area: living_room
+  exclude_entities:
+    - light.cabinet_led_accent       # won't be counted or controlled
+    - sensor.work_laptop_battery     # won't trigger low battery alerts
+    - binary_sensor.desk_motion      # won't trigger presence pulse
+```
+
+---
+
 ## 🚀 Installation
 
 1. Make sure you have [Bubble Card](https://github.com/Clooos/Bubble-Card) (v2.3.0+) installed via HACS.
@@ -67,6 +87,8 @@ ramss3s_area_v3:
   show_temperature: true
   show_humidity: true
   show_alerts: true
+  exclude_entities:
+    - light.hidden_accent_strip
 ```
 
 ---
