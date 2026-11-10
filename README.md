@@ -2,6 +2,8 @@
 
 A curated collection of advanced, custom modules designed for [Bubble Card](https://github.com/Clooos/Bubble-Card) in Home Assistant, created and maintained by **[Ramss3s](https://github.com/Ramss3s)**.
 
+![Bubble Area Card v3 Hero Showcase](./hero_showcase.png)
+
 ---
 
 ## 📦 Available Modules
@@ -34,6 +36,14 @@ A curated collection of advanced, custom modules designed for [Bubble Card](http
   * Smooth ping-pong auto-scrolling when subtitle sensors text overflows the card width.
 * ⚙️ **100% GUI Configurable:**
   * Includes a built-in **Test State Preview** gallery dropdown to test alerts, music waves, and dual sliders without triggering physical sensors.
+
+---
+
+### 🚨 Hazard Alerts Showcase
+![Hazard Alerts Showcase](./showcase_alerts.png)
+
+### 💡 Lighting, Climate & Sound Waves Showcase
+![Features Showcase](./showcase_features.png)
 
 ---
 
